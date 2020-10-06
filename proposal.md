@@ -1,4 +1,5 @@
 # Proposal
+
 Our intent for the final project for Webware, A20 is to make a messaging webapp using drawn images.
 
 ## Expected Functionality ##
@@ -15,14 +16,16 @@ The drawing program will use WebGL to make a 2D drawing.
 
 ## Group Members ##
 
-Brad Cosma
-Carly Pereira
-Jake Pelrah
-Noah Olson
-Patrick Houlihan
+- Brad Cosma
+- Carly Pereira
+- Jake Pelrah
+- Noah Olson
+- Patrick Houlihan
 
 ## Implementation Goals
-**UI**
+
+## UI ##
+
 ### Team : Carly Jake ###
 - Login Screen
 - Gallery with image preview
@@ -30,9 +33,13 @@ Patrick Houlihan
 - create drawing screen
 - address list of contacts
 - user search
+
 - #### Drawing UI ####
-**SERVER**
+
+## SERVER ##
+
 ### Team : Noah Brad ###
+
 - Handle OAuth 
 - Express
 - Glitch
@@ -41,24 +48,36 @@ Patrick Houlihan
 - Helmet
 - user search
 - Add/remove friends
-**DB**
+
+## DB ##
+
 ### Team : Noah Brad ###
+
 - Each user will have an inbox of received drawings
 - inbox stores image, sender, time sent
 - Images will be stored for 24 hours and will be deleted (if unopened)
 - Friends (Collection of added users)
-**DRAWING APPLICATION**
+
+## DRAWING APPLICATION ##
+
 ### Team : Patrick Jake ###
+
 - Color Swathes
 - Fill Bucket
 - 200/250 x 200/250 img size
 - STRETCH (PREDRAWN COMPONENTS)
+
 - #### Drawing UI ####
-**LOGIN/ACCOUNTS**
+
+## LOGIN/ACCOUNTS ##
+
 ### Team : Noah Brad ###
+
 - Profile Picture
 - GitHub OAuth
-**REAL TIME**
+
+## REAL TIME ##
+
 - Alert when drawing is started
 - Alert when drawing is sent
 - Alert when drawing is opened
