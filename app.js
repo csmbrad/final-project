@@ -1,6 +1,6 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
-
+const {MongoClient} = require('mongodb');
 
 const PORT = 3000
 const app = express()
@@ -99,3 +99,38 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`App listening on port: ${PORT}`)
 })
+
+////////////////////////////////// Database things //////////////////////////////////
+let client = null;
+async function initConnection() {
+    const uri = `mongodb+srv://PixelTalk:${process.env.PASSWORD}@cluster0.aaowb.mongodb.net/<dbname>?retryWrites=true&w=majority`
+    client = new MongoClient(uri, { useUnifiedTopology: true })
+    await client.connect()
+}
+
+async function getUser(username) {
+    if (client === null) {await initConnection()}
+    let collection = client.db("WebwareFinal").collection("UserData")
+    return await collection.findOne({username: username})
+}
+
+async function upsertUser(userData) {
+    if (client === null) {await initConnection()}
+    let collection = client.db("WebwareFinal").collection("UserData")
+    collection.updateOne(
+        { login: userData.login },
+        { $set: userData },
+        { upsert: true });
+}
+
+function cleanup() {
+    console.log("Cleaning up...")
+    if (client) client.close()
+    process.exit(0)
+}
+
+process.on('SIGTERM', cleanup)
+process.on('SIGINT', cleanup)
+
+//upsertUser({username: "thelegend27", inbox: "FULL OF MAIL"})
+getUser("thelegend27").then(r => console.log(r))
