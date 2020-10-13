@@ -13,11 +13,47 @@ console.log("hello world :o");
   ctx.canvas.height = canvas.offsetHeight
   ctx.lineWidth = 10
   ctx.imageSmoothingEnabled = true;
+  const DEFAULTCOLOR = '#111111'
   let stop = true
   const maxColors = 9
   ctx.strokeStyle = "black"
   let pCoords
   let pCoords2
+
+class point {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+}
+
+class curve {
+  constructor(point1, point2, point3) {
+    this.point1 = point1
+    this.point2 = point2
+    this.point3 = point3
+  }
+}
+
+class stroke {
+  constructor () {
+    this.curves = []
+  }
+  
+  appendCurve (curve) {
+    this.curves.push(curve);
+  }
+}
+
+class drawing {
+  constructor () {
+    this.strokes = []
+  }
+
+  appendStroke (stroke) {
+    this.strokes.push(stroke);
+  }
+}
 
    canvas.addEventListener('click', (event) => {
         let coordinates = trueCoordinates(event)
@@ -69,3 +105,8 @@ console.log("hello world :o");
           ctx.strokeStyle = document.getElementById(`color${i}`).innerHTML;
       }))
   }
+
+  document.getElementById('clear').addEventListener ( 'click', (event => {
+    ctx.fillStyle = DEFAULTCOLOR
+    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
+  }))
