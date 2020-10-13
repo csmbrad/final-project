@@ -1,0 +1,83 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A cool thing made with Glitch">
+
+    <title>Welcome to Glitch!</title>
+    
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <!-- import the webpage's client-side javascript file -->
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>DRAW SOMETHING</h1>
+    </header>
+    <main>
+      <canvas id="canvas">
+      </canvas>
+      <div class="d-flex flex-row">
+        <div class="p-2">
+            <button id = "color0" class = "btn btn-primary">
+                red
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color1" class = "btn btn-primary">
+                orange
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color2" class = "btn btn-primary">
+                yellow
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color3" class = "btn btn-primary">
+                green
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color4" class = "btn btn-primary">
+                blue
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color5" class = "btn btn-primary">
+                purple
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color6" class = "btn btn-primary">
+                pink
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color7" class = "btn btn-primary">
+                white
+            </button>
+        </div>
+        <div class="p-2">
+            <button id = "color8" class = "btn btn-primary">
+                black
+            </button>
+        </div>
+      </div>
+    </main>
+
+    <footer>Made with <a href="https://glitch.com">Glitch</a>!</footer>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+    <div class="glitchButton" style="position:fixed;top:2em;right:20px;"></div>
+    <script src="https://button.glitch.me/button.js" defer></script>
+  </body>
+</html>
