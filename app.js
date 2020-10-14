@@ -117,9 +117,8 @@ app.use(passport.session())
 app.get('/', (req, res) => {
 
     if (req.user !== undefined) {
-        req.user.then(user => {console.log(user)})
+        req.user.then(user => { console.log("logged in: " + user.username)})
         // Do something with the user data here
-
     }
 
 
@@ -142,6 +141,14 @@ app.get('/auth/github/callback',
     function(req, res) {
         res.redirect('/');
     });
+
+app.get("/logout", (req, res) => {
+    if (req.user !== undefined) {
+        req.user.then(user => {console.log("Log out requested for: " + user.username)})
+        req.logOut();
+    }
+    res.redirect('/');
+});
 
 
 // start listening on PORT
