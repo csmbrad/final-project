@@ -23,10 +23,9 @@ let pCoords2
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 30
+let drawingTimeLimit = 3
 let drawingTimeout
-
-
+let imageData
 
 canvas.addEventListener('click', (event) => {
     if (!timerStarted) {
@@ -106,14 +105,18 @@ document.querySelector('#closeDrawingWindow').addEventListener('click', () => {
 
 
 let timeRemaining = drawingTimeLimit
+
 function timer() {
     if (timeRemaining > 0) {
-
         timeRemaining--
-
         //update timer element
         document.querySelector('#drawingTimer').innerHTML = `${timeRemaining}s`
     } else {
+
+        //upload drawing to server here
+        let drawing = canvas.toDataURL('image/png')
+        console.log(drawing)
+
 
         //reset time remaining
         timeRemaining = drawingTimeLimit
@@ -134,9 +137,10 @@ function timer() {
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
 
+
+
     }
 }
-
 
 
 class point {
@@ -173,4 +177,3 @@ class drawing {
         this.strokes.push(stroke);
     }
 }
-
