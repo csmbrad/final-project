@@ -115,23 +115,29 @@ app.use(passport.session())
 
 ////////////////////////////////// Routes //////////////////////////////////
 app.get('/', (req, res) => {
+    if (req.user !== undefined && req.user !== null) {
+        req.user.then(user => {
+            console.log("logged in: " + user.username)
 
-    if (req.user !== undefined) {
-        req.user.then(user => { console.log("logged in: " + user.username)})
-        // Do something with the user data here
+            res.render('gallery', {
+                layout: false,
+                // populate page with data from database
+                userData: user
+            })
+        })
     }
-
-
-    res.render('gallery', {
-        layout: false,
-        // populate page with data from database
-        userData: {
-            username: "HScorpio92",
-            avatar: '/images/user_01.png',
-            flag: '/images/flags/nepal.png',
-            drawings: drawings
-        }
-    })
+    else {
+        res.render('gallery', {
+            layout: false,
+            // populate page with data from database
+            userData: {
+                username: "HScorpio92",
+                avatar: '/images/user_01.png',
+                flag: '/images/flags/mexico.png',
+                drawings: drawings
+            }
+        })
+    }
 })
 
 app.get('/auth/github', passport.authenticate('github'));
@@ -139,7 +145,20 @@ app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
     function(req, res) {
-        res.redirect('/');
+        getUser(req.user.username).then(result => {
+            if (result === null) {
+                // Create new entry in DB
+                upsertUser({
+                    username: req.user.username,
+                    avatar: '/images/user_01.png',      // Some placeholder image here (maybe github icon?)
+                    flag: '/images/flags/mexico.png',   // Grab flag from IP???
+                    drawings: {}
+                }).then(res.redirect('/'))
+            }
+            else { // User found
+                res.redirect('/')
+            }
+        })
     });
 
 app.get("/logout", (req, res) => {
@@ -160,7 +179,7 @@ app.listen(PORT, () => {
 let DBclient = null;
 async function initConnection() {
     const uri = `mongodb+srv://PixelTalk:${process.env.PASSWORD}@cluster0.aaowb.mongodb.net/<dbname>?retryWrites=true&w=majority`
-    DBclient = new MongoClient(uri, { useUnifiedTopology: true })
+    DBclient = new MongoClient(uri, { useUnifiedTopology: true, useNewUrlParser: true })
     await DBclient.connect()
 }
 
