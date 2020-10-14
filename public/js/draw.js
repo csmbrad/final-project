@@ -6,12 +6,13 @@ console.log("hello world :o");
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
 
-
+const height = 300
+const width = 300
 //canvas variables
 const canvas = document.getElementById('messageCanvas')
 const ctx = canvas.getContext('2d')
-ctx.canvas.clientWidth = 300
-ctx.canvas.clientHeight = 300
+ctx.canvas.clientWidth = width
+ctx.canvas.clientHeight = height
 ctx.lineWidth = 10
 ctx.imageSmoothingEnabled = true;
 const DEFAULTCOLOR = '#111111'
@@ -22,7 +23,7 @@ let pCoords2
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 10
+let drawingTimeLimit = 30
 let drawingTimeout
 
 
@@ -63,6 +64,7 @@ canvas.addEventListener('mouseup', (event => {
     ctx.beginPath()
     stop = true;
 }))
+
 
 function trueCoordinates(event) {
     let rect = canvas.getBoundingClientRect()
@@ -122,6 +124,9 @@ function timer() {
 
         //reset timer flag
         timerStarted = false
+
+        //stop drawing
+        stop = true;
 
         //enable the close button
         document.querySelector('#closeDrawingWindow').disabled = false
