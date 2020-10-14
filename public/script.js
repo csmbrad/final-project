@@ -8,18 +8,20 @@ console.log("hello world :o");
 
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
-  console.log(canvas)
   ctx.canvas.width = canvas.offsetWidth
   ctx.canvas.height = canvas.offsetHeight
   ctx.lineWidth = 10
   ctx.imageSmoothingEnabled = true;
   const DEFAULTCOLOR = '#111111'
-  let stop = true
   const maxColors = 9
   ctx.strokeStyle = "black"
   let pCoords
-  let pCoords2
-
+  //stop controls if the brush is actively drawing or not
+  let stop = true
+  //inFrame controls if the mouse can actively change the canvas
+  let inFrame = false
+  
+  
 class point {
   constructor(x, y) {
     this.x = x
@@ -27,21 +29,23 @@ class point {
   }
 }
 
-class curve {
-  constructor(point1, point2, point3) {
-    this.point1 = point1
-    this.point2 = point2
-    this.point3 = point3
-  }
-}
-
 class stroke {
-  constructor () {
-    this.curves = []
+  constructor (brushColor, brushSize) {
+    this.brushColor = brushColor
+    this.brushSize = brushSize
+    this.points = []
   }
   
-  appendCurve (curve) {
-    this.curves.push(curve);
+  appendPoint (point) {
+    this.points.push(point);
+  }
+
+  changeColor(color) {
+    this.brushColor = color
+  }
+
+  changeSize(brushSize) {
+    this.brushSize = brushSize
   }
 }
 
@@ -55,58 +59,91 @@ class drawing {
   }
 }
 
-   canvas.addEventListener('click', (event) => {
-        let coordinates = trueCoordinates(event)
-        draw(coordinates.xLoc, coordinates.yLoc)
-        ctx.beginPath()
-  }, false)
+let picture = new drawing()
+let currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+
+//mouse over/out
+  canvas.addEventListener('mouseover', (event => {
+    ctx.beginPath()
+    stop = true
+    pCoords = trueCoordinates(event)
+  }))
+
+  canvas.addEventListener('mouseout', (event => {
+    stop = true
+    inFrame = false
+    if (currentStroke.points.length > 0) {
+    picture.appendStroke(currentStroke)
+    currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+    console.log(picture)
+  }
+  }))
+
+  canvas.addEventListener('click', (event => {
+    if (inFrame) {
+      pCoords = trueCoordinates(event)
+      // let pointStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+      // pointStroke.appendPoint(pCoords)
+      // picture.appendStroke(pointStroke)
+      draw(pCoords.x, pCoords.y)
+      ctx.beginPath()
+    }
+  }))
 
   
   canvas.addEventListener('mousedown', (event => {
-        stop = false
-        let coordinates = trueCoordinates(event)
-        pCoords = coordinates;
+    stop = false
+    inFrame = true
+    currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+    pCoords = trueCoordinates(event)
   }))
 
   canvas.addEventListener('mousemove', (event => {
-    if (stop) {
-        pCoords2 = trueCoordinates(event)
-        return
+    if (!stop) {
+      pCoords = trueCoordinates(event)
+      currentStroke.appendPoint(pCoords)
+      draw(pCoords.x, pCoords.y)
     }
-    let coordinates = trueCoordinates(event)
-    draw(coordinates.xLoc, coordinates.yLoc)
   }))
     
   canvas.addEventListener('mouseup', (event => {
-        ctx.beginPath()
-        stop = true;
+    ctx.beginPath()
+    stop = true
+    if (currentStroke.points.length > 0) {
+      picture.appendStroke(currentStroke)
+      currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+      console.log(picture)
+    }
   }))
+
 
   function trueCoordinates(event) {
     let canvasLeft = canvas.offsetLeft + canvas.clientLeft
     let canvasTop = canvas.offsetTop + canvas.clientTop
     let x = event.pageX - canvasLeft
     let y = event.pageY - canvasTop
-    return {xLoc : x, yLoc : y}
+    return new point(x,y)
   }
 
   function draw(x, y) {
     ctx.lineCap = 'round';
-    ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc,x,y)
+     //ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc,x,y)
+    ctx.lineTo(x,y)
     ctx.stroke()
     ctx.beginPath()
     ctx.moveTo(x,y)
-    pCoords2 = pCoords
-    pCoords = {xLoc : x, yLoc : y}
   }
 
   for (let i = 0; i < maxColors; i++) {
       document.getElementById(`color${i}`).addEventListener('click', (event => {
-          ctx.strokeStyle = document.getElementById(`color${i}`).innerHTML;
+          ctx.strokeStyle = document.getElementById(`color${i}`).innerHTML
+          currentStroke.changeColor(ctx.strokeStyle)
       }))
   }
 
   document.getElementById('clear').addEventListener ( 'click', (event => {
-    ctx.fillStyle = DEFAULTCOLOR
     ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height)
   }))
+
+
+  
