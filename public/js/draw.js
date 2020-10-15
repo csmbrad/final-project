@@ -206,5 +206,6 @@ function timer() {
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
 
+        picture = new drawing()
     }
 }
