@@ -4,6 +4,7 @@ const {MongoClient} = require('mongodb');
 const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
 const cookieSession = require('cookie-session')
+require('dotenv').config()
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 
@@ -104,6 +105,7 @@ app.get('/mydata', (req, res) => {
 
 app.get('/auth/github', passport.authenticate('github'));
 
+// TODO: login 1/2 works. somethings wrong with the db portion of it
 app.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
     function(req, res) {
