@@ -5,6 +5,7 @@ const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
 const cookieSession = require('cookie-session')
 const favicon = require("serve-favicon");
+const bodyParser = require("body-parser");
 
 const PORT = 3000
 const app = express()
@@ -98,7 +99,6 @@ app.get('/mydata', (req, res) => {
     }
 })
 
-
 app.get('/auth/github', passport.authenticate('github'));
 
 app.get('/auth/github/callback',
@@ -111,7 +111,7 @@ app.get('/auth/github/callback',
                     username: req.user.username,
                     avatar: '/images/user_01.png',      // Some placeholder image here (maybe github icon?)
                     flag: '/images/flags/mexico.png',   // Grab flag from IP???
-                    friends: []
+                    friends: ["user1","user2","user3","user4","user5"]
                 }).then(res.redirect('/'))
             }
             else { // User found
@@ -128,6 +128,11 @@ app.get("/logout", (req, res) => {
     res.redirect('/');
 })
 
+/////// POST //////
+
+app.post('/friend', bodyParser.json(),  (req, res) => {
+    console.log(req.body.friendUsername)
+})
 
 // start listening on PORT
 app.listen(PORT, () => {

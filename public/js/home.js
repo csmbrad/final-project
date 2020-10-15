@@ -12,8 +12,8 @@ fetch("/mydata")
 function updateFriendsDisplay(myData) {
 
     // Will need to pull data for each friend
-
-    let friends = ["1,","2,","3,","4,","5,","6,","7,","8,","9,","10,","11,"] //myData.friends
+    console.log(myData)
+    let friends = myData.friends
     let container = document.getElementById("friendsDisplay")
     let rows = []
 
@@ -23,6 +23,21 @@ function updateFriendsDisplay(myData) {
             newRow.classList.add("row")
             rows.push(newRow)
         }
+
+        // Get friend data by
+        let friend = null
+        fetch("/friend", {
+            method:"POST",
+            body:JSON.stringify({friendUsername:friends[i]}),
+            headers: { "Content-Type": "application/json"}
+        })
+            .then(response => response.json())
+            .then(json => {
+               friend = json
+                console.log(friend)
+            })
+
+
         let newCard = document.createElement("h1")
         newCard.innerText = friends[i]
         rows[rows.length - 1].appendChild(newCard) // add to the freshest row
