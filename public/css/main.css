@@ -2,32 +2,31 @@ html{
     filter: blur(0px);
 }
 
-#drawingTimer{
-    color: black;
-    padding-left: 4px;
+#galleryThumb{
+
 }
 
 canvas{
     border: 2px black solid;
 }
 
-#userHandle{
-    margin-top: 10px;
+.flag-pfp {
+    display: flex;
+    align-items: center;
 }
 
 #userFlag {
-
     width: 100px;
-    height: 75px;
+    height: 50px;
     margin-right: 10px;
     object-fit:scale-down;
 }
 
 #userAvatar {
-    border: 2px black solid;
-    width: 75px;
-    height: 75px;
-
+    border: 1px black solid;
+    border-radius: .3rem;
+    width: 50px;
+    height: 50px;
 }
 
 #btnHome{
@@ -45,7 +44,8 @@ canvas{
     -webkit-filter: blur(15px);
 }
 
-[id^="color_"]{
+[id^="btnDraw"]{
+    background-color: yellow;
     width: 34px;
     height: 34px;
 }
@@ -54,14 +54,13 @@ canvas{
     margin-left: -30px;
 }
 .slider-wrapper {
-    display: block;
-    width: 2px;
-    height: 1px;
+    display: inline-block;
+    width: 20px;
+    height: 110px;
 }
 .slider-wrapper input {
-    border: 1px black solid;
     width: 300px;
-    height: 34px;
+    height: 20px;
     transform-origin: 140px 165px;
     transform: rotate(-90deg);
 }
@@ -69,8 +68,9 @@ canvas{
 .slider-wrapper input {
     -webkit-appearance: none;
     width: 305px;
-    height: 34px;
+    height: 25px;
     background: #d3d3d3;
+    outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
@@ -83,16 +83,36 @@ canvas{
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 34px;
-    height: 34px;
+    width: 25px;
+    height: 25px;
     background: #292b2c;
     cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
-    width: 34px;
-    height: 34px;
+    width: 25px;
+    height: 25px;
     background: #292b2c;
     cursor: pointer;
 }
 
+/* LOGIN PAGE CSS */
+#github-button {
+    width: auto;
+}
+
+#github-button > a {
+    text-decoration: none;
+    color: #444;
+}
+
+/* Overriding the bootstrap style because we have a dark nav bar*/
+.btn-github {
+    color: #444;
+    background-color: #fff;
+}
+
+/* PixelTalk h1 element */
+.title {
+    margin: 5% 0;
+}

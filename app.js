@@ -4,6 +4,7 @@ const {MongoClient} = require('mongodb');
 const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
 const cookieSession = require('cookie-session')
+const favicon = require("serve-favicon");
 
 const PORT = 3000
 const app = express()
@@ -13,6 +14,9 @@ let formattedDate = date.toLocaleDateString('en-US')
 
 
 /////////////////////////////// General Middleware  ///////////////////////////////
+
+// serve favicon
+app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
 // set template rendering engine to use handlebars
 app.engine('handlebars', exphbs())
@@ -55,19 +59,38 @@ app.use(passport.session())
 
 // home route
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + "/views/index.html");
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+            console.log("logged in: " + user.username)
+
+            // send user data back
+            res.sendFile(__dirname + "/views/index.html");
+        })
+    }
+    else {
+        res.sendFile(__dirname + "/views/login.html");
+    }
 })
 
 // in case index.html specified
 app.get("/index.html", (req, res) => {
-    res.sendFile(__dirname + "/views/index.html");
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+            console.log("logged in: " + user.username)
+
+            // send user data back
+            res.sendFile(__dirname + "/views/index.html");
+        })
+    }
+    else {
+        res.sendFile(__dirname + "/views/login.html");
+    }
 })
 
 
 app.get('/mydata', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
-            console.log("logged in: " + user.username)
 
             // send user data back
             res.json(user)
