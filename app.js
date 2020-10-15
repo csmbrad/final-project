@@ -111,7 +111,7 @@ app.get('/auth/github/callback',
                     username: req.user.username,
                     avatar: '/images/user_01.png',      // Some placeholder image here (maybe github icon?)
                     flag: '/images/flags/mexico.png',   // Grab flag from IP???
-                    drawings: {}
+                    friends: []
                 }).then(res.redirect('/'))
             }
             else { // User found
