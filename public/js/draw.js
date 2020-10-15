@@ -6,28 +6,89 @@ console.log("hello world :o");
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
 
-const height = 300
-const width = 300
-//canvas variables
 const canvas = document.getElementById('messageCanvas')
 const ctx = canvas.getContext('2d')
-ctx.canvas.clientWidth = width
-ctx.canvas.clientHeight = height
+ctx.canvas.width = 300
+ctx.canvas.height = 300
 ctx.lineWidth = 10
 ctx.imageSmoothingEnabled = true;
 const DEFAULTCOLOR = '#111111'
-let stop = true
+const maxColors = 9
 ctx.strokeStyle = "black"
 let pCoords
-let pCoords2
+//stop controls if the brush is actively drawing or not
+let stop = true
+//inFrame controls if the mouse can actively change the canvas
+let inFrame = false
+
 
 //timer variables
 let timerStarted = false
 let drawingTimeLimit = 3
 let drawingTimeout
-let imageData
 
-canvas.addEventListener('click', (event) => {
+
+
+
+class point {
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+    }
+}
+
+class stroke {
+    constructor(brushColor, brushSize) {
+        this.brushColor = brushColor
+        this.brushSize = brushSize
+        this.points = []
+    }
+
+    appendPoint(point) {
+        this.points.push(point);
+    }
+
+    changeColor(color) {
+        this.brushColor = color
+    }
+
+    changeSize(brushSize) {
+        this.brushSize = brushSize
+    }
+}
+
+class drawing {
+    constructor() {
+        this.strokes = []
+    }
+
+    appendStroke(stroke) {
+        this.strokes.push(stroke);
+    }
+}
+
+let picture = new drawing()
+let currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+
+//mouse over/out
+canvas.addEventListener('mouseover', (event => {
+    ctx.beginPath()
+    stop = true
+    pCoords = trueCoordinates(event)
+}))
+
+canvas.addEventListener('mouseout', (event => {
+    stop = true
+    inFrame = false
+    if (currentStroke.points.length > 0) {
+        picture.appendStroke(currentStroke)
+        currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+        console.log(picture)
+    }
+}))
+
+canvas.addEventListener('click', (event => {
+
     if (!timerStarted) {
 
         //start timer
@@ -36,32 +97,41 @@ canvas.addEventListener('click', (event) => {
 
         //disable closing window after starting a drawing
         document.querySelector('#closeDrawingWindow').disabled = true
-    } else {
-        let coordinates = trueCoordinates(event)
-        draw(coordinates.xLoc, coordinates.yLoc)
+    }
+    else if (inFrame) {
+        pCoords = trueCoordinates(event)
+        // let pointStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+        // pointStroke.appendPoint(pCoords)
+        // picture.appendStroke(pointStroke)
+        draw(pCoords.x, pCoords.y)
         ctx.beginPath()
     }
-}, false)
+}))
 
 
 canvas.addEventListener('mousedown', (event => {
     stop = false
-    let coordinates = trueCoordinates(event)
-    pCoords = coordinates;
+    inFrame = true
+    currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+    pCoords = trueCoordinates(event)
 }))
 
 canvas.addEventListener('mousemove', (event => {
-    if (stop) {
-        pCoords2 = trueCoordinates(event)
-        return
+    if (!stop) {
+        pCoords = trueCoordinates(event)
+        currentStroke.appendPoint(pCoords)
+        draw(pCoords.x, pCoords.y)
     }
-    let coordinates = trueCoordinates(event)
-    draw(coordinates.xLoc, coordinates.yLoc)
 }))
 
 canvas.addEventListener('mouseup', (event => {
     ctx.beginPath()
-    stop = true;
+    stop = true
+    if (currentStroke.points.length > 0) {
+        picture.appendStroke(currentStroke)
+        currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+        console.log(picture)
+    }
 }))
 
 
@@ -69,19 +139,17 @@ function trueCoordinates(event) {
     let rect = canvas.getBoundingClientRect()
     let x = event.clientX - rect.x
     let y = event.clientY - rect.y
-    return {xLoc: x, yLoc: y}
+    return new point(x, y)
 }
 
 function draw(x, y) {
     ctx.lineCap = 'round';
-    ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc, x, y)
+    //ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc,x,y)
+    ctx.lineTo(x, y)
     ctx.stroke()
     ctx.beginPath()
     ctx.moveTo(x, y)
-    pCoords2 = pCoords
-    pCoords = {xLoc: x, yLoc: y}
 }
-
 
 //get all color buttons
 color_buttons = document.querySelectorAll('[id^=color_]')
@@ -89,6 +157,7 @@ color_buttons = document.querySelectorAll('[id^=color_]')
 color_buttons.forEach(button => button.addEventListener('click', () => {
     ctx.strokeStyle = button.id.split('_')[1]
 }))
+
 
 
 //set pen size
@@ -137,43 +206,5 @@ function timer() {
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
 
-
-
-    }
-}
-
-
-class point {
-    constructor(x, y) {
-        this.x = x
-        this.y = y
-    }
-}
-
-class curve {
-    constructor(point1, point2, point3) {
-        this.point1 = point1
-        this.point2 = point2
-        this.point3 = point3
-    }
-}
-
-class stroke {
-    constructor() {
-        this.curves = []
-    }
-
-    appendCurve(curve) {
-        this.curves.push(curve);
-    }
-}
-
-class drawing {
-    constructor() {
-        this.strokes = []
-    }
-
-    appendStroke(stroke) {
-        this.strokes.push(stroke);
     }
 }
