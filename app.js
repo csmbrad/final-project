@@ -58,6 +58,9 @@ app.use(passport.session())
 
 ////////////////////////////////// Routes //////////////////////////////////
 
+
+// ================ GET ================
+
 // home route
 app.get('/', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
@@ -109,7 +112,7 @@ app.get('/auth/github/callback',
                 // Create new entry in DB
                 upsertUser({
                     username: req.user.username,
-                    avatar: '/images/user_01.png',      // Some placeholder image here (maybe github icon?)
+                    avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
                     flag: '/images/flags/mexico.png',   // Grab flag from IP???
                     friends: ["user1","user2","user3","user4","user5"]
                 }).then(res.redirect('/'))
@@ -128,10 +131,13 @@ app.get("/logout", (req, res) => {
     res.redirect('/');
 })
 
-/////// POST //////
+// ================ POST ================
 
 app.post('/friend', bodyParser.json(),  (req, res) => {
-    console.log(req.body.friendUsername)
+    getUser(req.body.friendUsername).then(friendData => {
+        // send friend data back
+        res.json(friendData)
+    })
 })
 
 // start listening on PORT
