@@ -3,6 +3,9 @@ console.log("home.js")
 fetch("/mydata")
     .then(response => response.json())
     .then(json => {
+        document.getElementById("userFlag").src = json.flag
+        document.getElementById("userAvatar").src = json.avatar
+        document.getElementById("userHandle").innerText = json.username
         updateFriendsDisplay(json).then()
     })
 
