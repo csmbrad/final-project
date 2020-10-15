@@ -1,5 +1,11 @@
-html{
-    filter: blur(0px);
+
+
+.card{
+    margin: .5em;
+}
+
+#galleryThumb{
+    background-color: white;
 }
 
 #drawingTimer{
@@ -7,7 +13,7 @@ html{
     padding-left: 4px;
 }
 
-canvas{
+canvas {
     border: 2px black solid;
 }
 
@@ -16,7 +22,6 @@ canvas{
 }
 
 #userFlag {
-
     width: 100px;
     height: 75px;
     margin-right: 10px;
@@ -24,7 +29,6 @@ canvas{
 }
 
 #userAvatar {
-    border: 2px black solid;
     width: 75px;
     height: 75px;
 

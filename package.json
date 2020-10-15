@@ -2,10 +2,14 @@
   "name": "a42020",
   "version": "1.0.0",
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-session": "^1.4.0",
+    "express": "^4.17.1",
+    "passport": "^0.4.1"
   },
   "devDependencies": {
-    "express-handlebars": "^5.1.0"
+    "express-handlebars": "^5.1.0",
+    "mongodb": "^3.6.2",
+    "passport-github": "^1.1.0"
   },
   "scripts": {
     "start": "node app.js"
