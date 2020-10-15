@@ -14,66 +14,62 @@
 </head>
 
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark  bg-dark" style="height:86px">
-        
+    <nav class="navbar navbar-expand-lg navbar-dark  bg-dark">
+        <div class="container-fluid">
+            <div>
                 <button type=" button" id="btnHome"
                         class="btn btn-light btn-lg">
                     <img src="/images/nav/home.svg" width="40px">
                 </button>
+                <a class="navbar-brand" href="#">
+                    <img src={{{userData.flag}}} id="userFlag">
+                    <img src={{{userData.avatar}}} id="userAvatar">
+                    <span id="userHandle" class="text-light">{{{userData.username}}}</span>
+                </a>
+            </div>
+            <button type="button" id="btnSend"
+                    class="btn btn-light btn-lg my-2 my-sm-0"
+                    data-toggle="modal" data-target="#drawingModalCenter">
+                <img src="/images/nav/arrow.svg" width="40px">
+            </button>
+        </div>
 
-                <a href="/auth/github">login</a> <!-- TODO replace me! -->
+    <!-- Modal -->
+    <div class="modal text-black" id="drawingModalCenter" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mx-auto">
+                            <div class="col">
+                                <canvas height="300px" width="300px"></canvas>
+                            </div>
+                            <div id="colorPicker" class="col">
+                                <div class="btn-group-vertical">
+                                    <button type="button" id="btnDrawRed"
+                                            style="background-color: red"></button>
+                                    <button type="button" id="btnDrawOrange"
+                                            style="background-color: orange"></button>
+                                    <button type="button" id="btnDrawYellow"
+                                            style="background-color: yellow"></button>
+                                    <button type="button" id="btnDrawGreen"
+                                            style="background-color: green"></button>
+                                    <button type="button" id="btnDrawLightBlue"
+                                            style="background-color: lightblue"></button>
+                                    <button type="button" id="btnDrawDarkBlue"
+                                            style="background-color: darkblue"></button>
+                                    <button type="button" id="btnDrawPink"
 
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <a class="navbar-brand" href="#">
-                        <img src={{{userData.flag}}} id="userFlag">
-                        <img src={{{userData.avatar}}} id="userAvatar">
-                        <span id="userHandle" class="text-light">{{{userData.username}}}</span>
-                    </a>
-                </div>
-                <button type=" button" id="btnSend"
-                        class="btn btn-light btn-lg my-2 my-sm-0"
-                        data-toggle="modal" data-target="#drawingModalCenter">
-                    <img src="/images/nav/arrow.svg" width="40px">
-                </button>
-
-
-        <!-- Modal -->
-        <div class="modal text-black" id="drawingModalCenter" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row mx-auto">
-                                <div class="col">
-                                    <canvas height="300px" width="300px"></canvas>
+                                            style="background-color: pink"></button>
+                                    <button type="button" id="btnDrawBlack"
+                                            style="background-color: black"></button>
+                                    <button type="button" id="btnDrawWhite"
+                                            style="background-color: white"></button>
                                 </div>
-                                <div id="colorPicker" class="col">
-                                    <div class="btn-group-vertical">
-                                        <button type="button" id="btnDrawRed"
-                                                style="background-color: red"></button>
-                                        <button type="button" id="btnDrawOrange"
-                                                style="background-color: orange"></button>
-                                        <button type="button" id="btnDrawYellow"
-                                                style="background-color: yellow"></button>
-                                        <button type="button" id="btnDrawGreen"
-                                                style="background-color: green"></button>
-                                        <button type="button" id="btnDrawLightBlue"
-                                                style="background-color: lightblue"></button>
-                                        <button type="button" id="btnDrawDarkBlue"
-                                                style="background-color: darkblue"></button>
-                                        <button type="button" id="btnDrawPink"
-
-                                                style="background-color: pink"></button>
-                                        <button type="button" id="btnDrawBlack"
-                                                style="background-color: black"></button>
-                                        <button type="button" id="btnDrawWhite"
-                                                style="background-color: white"></button>
-                                    </div>
-                                </div>
-                                <div class="col align-items-end">
-                                    <div class="slider-wrapper">
-                                        <input type="range" min="1" max="100" value="50" class="slider" id="penSize">
-                                    </div>
+                            </div>
+                            <div class="col align-items-end">
+                                <div class="slider-wrapper">
+                                    <input type="range" min="1" max="100" value="50" class="slider" id="penSize">
                                 </div>
                             </div>
                         </div>
@@ -81,6 +77,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </nav>
 </header>
 

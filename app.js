@@ -105,7 +105,6 @@ app.get('/mydata', (req, res) => {
 
 app.get('/auth/github', passport.authenticate('github'));
 
-// TODO: login 1/2 works. somethings wrong with the db portion of it
 app.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/' }),
     function(req, res) {
