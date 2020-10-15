@@ -1,0 +1,17 @@
+{
+  "name": "a42020",
+  "version": "1.0.0",
+  "dependencies": {
+    "cookie-session": "^1.4.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.2",
+    "passport": "^0.4.1",
+    "passport-github": "^1.1.0"
+  },
+  "devDependencies": {
+    "express-handlebars": "^5.1.0"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}

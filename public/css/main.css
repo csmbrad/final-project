@@ -1,0 +1,99 @@
+html{
+    filter: blur(0px);
+}
+
+#galleryThumb{
+
+}
+
+canvas{
+    border: 2px black solid;
+}
+
+
+#userHandle{
+    margin-top: 10px;
+}
+
+#userFlag {
+
+    width: 100px;
+    height: 75px;
+    margin-right: 10px;
+    object-fit:scale-down;
+}
+
+#userAvatar {
+    border: 2px black solid;
+    width: 75px;
+    height: 75px;
+
+}
+
+#btnHome{
+    border: 1px solid black;
+    height: 75px;
+}
+
+#btnSend{
+    border: 1px solid black;
+    height: 75px;
+}
+
+#galleryThumb{
+    filter: blur(15px);
+    -webkit-filter: blur(15px);
+}
+
+[id^="btnDraw"]{
+    background-color: yellow;
+    width: 34px;
+    height: 34px;
+}
+
+#colorPicker{
+    margin-left: -30px;
+}
+.slider-wrapper {
+    display: inline-block;
+    width: 20px;
+    height: 110px;
+}
+.slider-wrapper input {
+    width: 300px;
+    height: 20px;
+    transform-origin: 140px 165px;
+    transform: rotate(-90deg);
+}
+
+.slider-wrapper input {
+    -webkit-appearance: none;
+    width: 305px;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #292b2c;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #292b2c;
+    cursor: pointer;
+}
+
