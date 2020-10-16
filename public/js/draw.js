@@ -1,11 +1,3 @@
-// client-side js, loaded by index.html
-// run by the browser each time the page is loaded
-
-console.log("hello world :o");
-
-// client-side js, loaded by index.html
-// run by the browser each time the page is loaded
-
 const canvas = document.getElementById('messageCanvas')
 const ctx = canvas.getContext('2d')
 ctx.canvas.width = 300

@@ -7,12 +7,9 @@ fetch("/mydata")
     })
 updateGalleryDisplay().then()
 
-console.log(sessionStorage.getItem("friendData"))
-
 async function updateGalleryDisplay() {
 
     let drawings = await getDrawings()
-    console.log(drawings)
 
     //handle drawings here
     const gallery = document.querySelector('#gallery')
@@ -47,15 +44,28 @@ async function updateGalleryDisplay() {
 function getDrawings () {
 
     let artist = sessionStorage.getItem("friendData") // Pull value set by home
+    console.log("artist: " + artist)
 
-    // Get friend data by username
-    return fetch("/drawings", {
-        method:"POST",
-        body:JSON.stringify({artist: artist}),
-        headers: { "Content-Type": "application/json"}
-    })
-        .then(response => response.json())
-        .then(json => {
-            return json
+    if (artist === null) {
+        console.log("getting inbox")
+        return fetch("/inbox")
+            .then(response => response.json())
+            .then(json => {
+                return json
+            })
+    }
+    else {
+        console.log("getting conversation")
+
+        // Get friend data by username
+        return fetch("/drawings", {
+            method:"POST",
+            body:JSON.stringify({artist: artist}),
+            headers: { "Content-Type": "application/json"}
         })
+            .then(response => response.json())
+            .then(json => {
+                return json
+            })
+    }
 }

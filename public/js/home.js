@@ -1,4 +1,4 @@
-console.log("home.js")
+sessionStorage.clear()
 
 fetch("/mydata")
     .then(response => response.json())

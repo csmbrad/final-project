@@ -66,7 +66,6 @@ app.use(passport.session())
 app.get('/', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
-            console.log("logged in: " + user.username)
 
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
@@ -81,7 +80,6 @@ app.get('/', (req, res) => {
 app.get("/index.html", (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
-            console.log("logged in: " + user.username)
 
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
@@ -90,6 +88,10 @@ app.get("/index.html", (req, res) => {
     else {
         res.sendFile(__dirname + "/views/login.html");
     }
+})
+
+app.get("/gallery.html", (req, res) => {
+    res.sendFile(__dirname + "/views/gallery.html");
 })
 
 app.get('/mydata', (req, res) => {
@@ -102,8 +104,24 @@ app.get('/mydata', (req, res) => {
     }
 })
 
-app.get("/gallery.html", (req, res) => {
-    res.sendFile(__dirname + "/views/gallery.html");
+app.get("/inbox", (req, res) => {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+
+
+            // send user's inbox back
+            getInbox(user.username).then(drawings => {
+
+                let drawingArray = []
+                drawings.forEach(drawing=>{
+                    drawingArray.push(drawing)
+                }).then(()=>{
+                    // send drawing data back
+                    res.json(drawingArray)
+                })
+            })
+        })
+    }
 })
 
 app.get('/auth/github', passport.authenticate('github'));
@@ -129,7 +147,6 @@ app.get('/auth/github/callback',
 
 app.get("/logout", (req, res) => {
     if (req.user !== undefined) {
-        req.user.then(user => {console.log("Log out requested for: " + user.username)})
         req.logOut();
     }
     res.redirect('/');
@@ -147,7 +164,7 @@ app.post('/friend', bodyParser.json(),  (req, res) => {
 app.post('/drawings', bodyParser.json(),  (req, res) => {
 
     req.user.then(user => {
-        getDrawings(req.body.artist, user.username).then(drawings => {
+        getConversation(req.body.artist, user.username).then(drawings => {
 
             let drawingArray = []
             drawings.forEach(drawing=>{
@@ -186,10 +203,16 @@ async function getUser(username) {
     return await collection.findOne({username: username})
 }
 
-async function getDrawings(artist, receiver) {
+async function getConversation(artist, receiver) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
     return await collection.find({artist: artist, receiver:receiver})
+}
+
+async function getInbox(receiver) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    return await collection.find({receiver:receiver})
 }
 
 async function upsertUser(userData) {
