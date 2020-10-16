@@ -20,21 +20,23 @@ canvas {
     border: 2px black solid;
 }
 
-#userHandle{
-    margin-top: 10px;
+.flag-pfp {
+    display: flex;
+    align-items: center;
 }
 
 #userFlag {
     width: 100px;
-    height: 75px;
+    height: 50px;
     margin-right: 10px;
     object-fit:scale-down;
 }
 
 #userAvatar {
-    width: 75px;
-    height: 75px;
-
+    border: 1px black solid;
+    border-radius: .3rem;
+    width: 50px;
+    height: 50px;
 }
 
 #btnHome{
@@ -45,6 +47,14 @@ canvas {
 #btnSend{
     border: 1px solid black;
     height: 75px;
+}
+
+.navbar  {
+    align-content: end;
+}
+
+.navbar-brand {
+    margin-left: 16px;
 }
 
 #galleryThumb{
@@ -103,3 +113,23 @@ canvas {
     cursor: pointer;
 }
 
+/* LOGIN PAGE CSS */
+#github-button {
+    width: auto;
+}
+
+#github-button > a {
+    text-decoration: none;
+    color: #444;
+}
+
+/* Overriding the bootstrap style because we have a dark nav bar*/
+.btn-github {
+    color: #444;
+    background-color: #fff;
+}
+
+/* PixelTalk h1 element */
+.title {
+    margin: 3% 0;
+}
