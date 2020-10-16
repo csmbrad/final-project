@@ -4,7 +4,6 @@ const {MongoClient} = require('mongodb');
 const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
 const cookieSession = require('cookie-session')
-require('dotenv').config()
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 
