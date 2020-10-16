@@ -201,9 +201,9 @@ function timer() {
             method:"POST",
             body:JSON.stringify(
                 {
-                    title: "PLACEHOLDER",
+                    title: document.getElementById("drawingTitle").value,
                     time: Date.now(),
-                    receiver: "noahvolson",
+                    receiver: document.getElementById("myInput").value,
                     URI: dataURL,
                     instructions: null
                 }
