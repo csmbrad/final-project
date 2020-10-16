@@ -91,7 +91,6 @@ app.get("/index.html", (req, res) => {
     }
 })
 
-
 app.get('/mydata', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
@@ -100,6 +99,10 @@ app.get('/mydata', (req, res) => {
             res.json(user)
         })
     }
+})
+
+app.get("/gallery.html", (req, res) => {
+    res.sendFile(__dirname + "/views/gallery.html");
 })
 
 app.get('/auth/github', passport.authenticate('github'));
