@@ -144,14 +144,17 @@ app.post('/friend', bodyParser.json(),  (req, res) => {
 })
 
 app.post('/drawings', bodyParser.json(),  (req, res) => {
-    getDrawings(req.body.artist, req.body.reciever).then(drawings => {
 
-        let drawingArray = []
-        drawings.forEach(drawing=>{
-            drawingArray.push(drawing)
-        }).then(()=>{
+    req.user.then(user => {
+        getDrawings(req.body.artist, user.username).then(drawings => {
+
+            let drawingArray = []
+            drawings.forEach(drawing=>{
+                drawingArray.push(drawing)
+            }).then(()=>{
                 // send drawing data back
                 res.json(drawingArray)
+            })
         })
     })
 })
@@ -175,10 +178,10 @@ async function getUser(username) {
     return await collection.findOne({username: username})
 }
 
-async function getDrawings(artist, reciever) {
+async function getDrawings(artist, receiver) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
-    return await collection.find({artist: artist, reciever: reciever})
+    return await collection.find({artist: artist, receiver:receiver})
 }
 
 async function upsertUser(userData) {
