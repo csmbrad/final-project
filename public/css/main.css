@@ -50,6 +50,10 @@ canvas {
     align-content: end;
 }
 
+.navbar-brand {
+    margin-left: 16px;
+}
+
 #galleryThumb{
     filter: blur(15px);
     -webkit-filter: blur(15px);
