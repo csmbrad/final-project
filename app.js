@@ -1,14 +1,14 @@
-const express = require('express')
-const {MongoClient} = require('mongodb');
-const passport = require("passport");
-const GitHubStrategy = require('passport-github').Strategy
-const cookieSession = require('cookie-session')
-const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
+const cookieSession = require('cookie-session')
+const express = require('express')
+const favicon = require("serve-favicon");
+const GitHubStrategy = require('passport-github').Strategy
+const IPinfo = require("node-ipinfo");
+const passport = require("passport");
+const {MongoClient} = require('mongodb');
 
 const PORT = 3000
 const app = express()
-
 
 
 /////////////////////////////// General Middleware  ///////////////////////////////
@@ -69,21 +69,6 @@ app.get('/', (req, res) => {
     }
 })
 
-// gallery route
-app.get("/gallery.html", (req, res) => {
-    if (req.user !== undefined && req.user !== null) { // if user has logged in
-        req.user.then(user => {
-            console.log("logged in: " + user.username)
-
-            // send user data back
-            res.sendFile(__dirname + "/views/gallery.html");
-        })
-    }
-    else {
-        res.sendFile(__dirname + "/views/login.html");
-    }
-})
-
 // in case index.html specified
 app.get("/index.html", (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
@@ -99,7 +84,6 @@ app.get("/index.html", (req, res) => {
     }
 })
 
-
 app.get('/mydata', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
@@ -108,6 +92,10 @@ app.get('/mydata', (req, res) => {
             res.json(user)
         })
     }
+})
+
+app.get("/gallery.html", (req, res) => {
+    res.sendFile(__dirname + "/views/gallery.html");
 })
 
 app.get('/auth/github', passport.authenticate('github'));
@@ -121,7 +109,7 @@ app.get('/auth/github/callback',
                 upsertUser({
                     username: req.user.username,
                     avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
-                    flag: '/images/flags/mexico.png',   // Grab flag from IP???
+                    flag: '/images/flags/MX.png',   // Grab flag from IP???
                     friends: ["user1","user2","user3","user4","user5"]
                 }).then(res.redirect('/'))
             }
@@ -148,6 +136,27 @@ app.post('/friend', bodyParser.json(),  (req, res) => {
     })
 })
 
+app.post('/drawings', bodyParser.json(),  (req, res) => {
+
+    req.user.then(user => {
+        getDrawings(req.body.artist, user.username).then(drawings => {
+
+            let drawingArray = []
+            drawings.forEach(drawing=>{
+                drawingArray.push(drawing)
+            }).then(()=>{
+                // send drawing data back
+                res.json(drawingArray)
+            })
+        })
+    })
+})
+
+app.post('/send', bodyParser.json(),  (req, res) => {
+    console.log(req.body)
+})
+
+
 // start listening on PORT
 app.listen(PORT, () => {
     console.log(`App listening on port: ${PORT}`)
@@ -167,6 +176,12 @@ async function getUser(username) {
     return await collection.findOne({username: username})
 }
 
+async function getDrawings(artist, receiver) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    return await collection.find({artist: artist, receiver:receiver})
+}
+
 async function upsertUser(userData) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("UserData")
@@ -176,6 +191,34 @@ async function upsertUser(userData) {
         { upsert: true });
 }
 
+async function insertDrawing(drawing) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    collection.insertOne(drawing)
+}
+
+
+
+
+
+/////////////////////////////////////// Geolocation ///////////////////////////////////////
+const token = process.env.IPINFO_TOKEN
+const ip = "2.17.4.0"
+const ipinfo = new IPinfo(token);
+
+ipinfo.lookupIp(ip).then((response) => {
+    console.log(response)
+    console.log(response.hostname); // google-public-dns-a.google.com
+    console.log(response.city); // Mountain View
+});
+
+
+
+
+
+
+
+////////////////////////////////// Graceful Termination //////////////////////////////////
 function cleanup() {
     console.log("Cleaning up...")
     if (DBclient) DBclient.close()
