@@ -1,7 +1,7 @@
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
 
-console.log("hello world :o");
+
 
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
@@ -24,7 +24,7 @@ let inFrame = false
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 20
+let drawingTimeLimit = 2
 let drawingTimeout
 
 
@@ -83,13 +83,23 @@ canvas.addEventListener('mouseout', (event => {
     if (currentStroke.points.length > 0) {
         picture.appendStroke(currentStroke)
         currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
-        console.log(picture)
+
     }
 }))
 
 canvas.addEventListener('click', (event => {
+    const title = document.querySelector('#drawingTitle')
+    let titleLength = title.value.length
 
-    if (!timerStarted) {
+    if(titleLength < 3){
+        stop = true
+        alert("Title must be longer than 2 characters")
+        ctx.fillStyle = DEFAULTCOLOR
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+    }
+
+    else if (!timerStarted && titleLength >=3) {
 
         //start timer
         drawingTimeout = setInterval(timer, 1000)
@@ -98,11 +108,9 @@ canvas.addEventListener('click', (event => {
         //disable closing window after starting a drawing
         document.querySelector('#closeDrawingWindow').disabled = true
     }
+
     else if (inFrame) {
         pCoords = trueCoordinates(event)
-        // let pointStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
-        // pointStroke.appendPoint(pCoords)
-        // picture.appendStroke(pointStroke)
         draw(pCoords.x, pCoords.y)
         ctx.beginPath()
     }
@@ -130,7 +138,7 @@ canvas.addEventListener('mouseup', (event => {
     if (currentStroke.points.length > 0) {
         picture.appendStroke(currentStroke)
         currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
-        console.log(picture)
+
     }
 }))
 
@@ -144,7 +152,6 @@ function trueCoordinates(event) {
 
 function draw(x, y) {
     ctx.lineCap = 'round';
-    //ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc,x,y)
     ctx.lineTo(x, y)
     ctx.stroke()
     ctx.beginPath()
@@ -177,15 +184,20 @@ let timeRemaining = drawingTimeLimit
 
 function timer() {
     if (timeRemaining > 0) {
+
         timeRemaining--
+
         //update timer element
         document.querySelector('#drawingTimer').innerHTML = `${timeRemaining}s`
     } else {
 
-        //upload drawing to server here
-        let drawing = canvas.toDataURL('image/png')
-        console.log(drawing)
+        //stop drawing
+        stop = true;
 
+        //upload drawing to server here
+        let completedDrawing = canvas.toDataURL('image/png')
+        // console.log(completedDrawing)
+        // console.log(picture)
 
         //reset time remaining
         timeRemaining = drawingTimeLimit
@@ -197,15 +209,13 @@ function timer() {
         //reset timer flag
         timerStarted = false
 
-        //stop drawing
-        stop = true;
+        //ready canvas for a new drawing
+        picture = new drawing()
 
         //enable the close button
         document.querySelector('#closeDrawingWindow').disabled = false
 
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
-
-        picture = new drawing()
     }
 }
