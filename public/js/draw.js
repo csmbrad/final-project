@@ -24,7 +24,7 @@ let inFrame = false
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 10
+let drawingTimeLimit = 2
 let drawingTimeout
 
 class point {
@@ -183,6 +183,7 @@ document.querySelector('#closeDrawingWindow').addEventListener('click', () => {
 
 let timeRemaining = drawingTimeLimit
 
+
 function timer() {
     if (timeRemaining > 0) {
         timeRemaining--
@@ -190,19 +191,27 @@ function timer() {
         document.querySelector('#drawingTimer').innerHTML = `${timeRemaining}s`
     } else {
 
+        const artist = document.querySelector('#userHandle').innerHTML
+        const title = document.querySelector('#drawingTitle').value
+        const receiver = document.querySelector('#receiver').value
+
         //upload drawing to server here
         let dataURL= canvas.toDataURL('image/png')
-        console.log(drawing)
+        let data = {title:title, artist:artist, receiver:receiver, URI:dataURL, Instructions:picture}
+        uploadDrawing(data).then((res)=>{
+            console.log('Uploaded')
+        })
 
         //reset globals
-        stop = true;
+        stop = true
         picture = new drawing()
         timerStarted = false
         timeRemaining = drawingTimeLimit
+        receiver.innerText = ''
+        title.innerText = ''
 
         //clear setTimeout
         clearTimeout(drawingTimeout)
-
 
 
         //clear timer
@@ -213,6 +222,19 @@ function timer() {
 
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
-
     }
 }
+
+function uploadDrawing (drawing) {
+
+    return fetch("/uploadDrawing", {
+        method:"POST",
+        body:JSON.stringify(drawing),
+        headers: { "Content-Type": "application/json"}
+    })
+        .then(response => response.json())
+        .then(json => {
+            return json
+        })
+}
+

@@ -15,6 +15,7 @@ async function updateGalleryDisplay() {
     let drawings = await getDrawings()
     const gallery = document.querySelector('#gallery')
     let galleryItems = []
+    console.log(drawings)
 
     for (let i = 0; i < drawings.length; i++) {
 
