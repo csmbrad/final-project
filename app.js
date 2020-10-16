@@ -101,22 +101,24 @@ app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback',
     passport.authenticate('github', {failureRedirect: '/'}),
     function (req, res) {
-        console.log(req.headers['x-forwarded-for'])
-        console.log(req.connection.remoteAddress)
         getUser(req.user.username).then(result => {
             if (result === null) {
-                // Create new entry in DB
-                upsertUser({
-                    username: req.user.username,
-                    avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
-                    flag: '/images/flags/MX.png',   // Grab flag from IP???
-                    friends: ["user1", "user2", "user3", "user4", "user5"]
-                }).then(res.redirect('/'))
+                //get country code for flag
+                ipCountryCodeToFlagPath(req).then((result) => {
+                    // Create new entry in DB
+                    upsertUser({
+                        username: req.user.username,
+                        avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
+                        flag: `/images/flags/${result._countryCode}.png`,
+                        friends: ["user1", "user2", "user3", "user4", "user5"]
+                    }).then(res.redirect('/'))
+                })
             } else { // User found
                 res.redirect('/')
             }
         })
     })
+
 
 app.get("/logout", (req, res) => {
     if (req.user !== undefined) {
@@ -214,18 +216,19 @@ async function insertDrawing(drawing) {
 }
 
 
-/////////////////////////////////////// Geolocation ///////////////////////////////////////
+///////////////////////////////////// Geolocation ///////////////////////////////////////
 const token = process.env.IPINFO_TOKEN
 const ipinfo = new IPinfo(token);
-const clientIP = ' 2.2.2.2'
 
-function getFlagByIp(req) {
+async function ipCountryCodeToFlagPath(req) {
+    let clientIP
+    try {
+        clientIP = req.headers['x-forwarded-for'].split(',')[0]
+    } catch (TypeError) {
+        clientIP = '91.206.168.14'
+    }
 
-    ipinfo.lookupIp(clientIP).then((response) => {
-        console.log(response)
-        console.log(response.hostname); // google-public-dns-a.google.com
-        console.log(response.city); // Mountain View
-    });
+    return await ipinfo.lookupIp(clientIP)
 }
 
 

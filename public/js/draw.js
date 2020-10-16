@@ -24,7 +24,7 @@ let inFrame = false
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 20
+let drawingTimeLimit = 2
 let drawingTimeout
 
 
