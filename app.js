@@ -7,9 +7,13 @@ const cookieSession = require('cookie-session')
 //require('dotenv').config()
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
+const http = require("http");
+const ws = require("ws");
+
 
 const PORT = 3000
 const app = express()
+const server = http.createServer( app )
 
 let date = new Date()
 let formattedDate = date.toLocaleDateString('en-US')
@@ -188,6 +192,10 @@ app.post('/send', bodyParser.json(),  (req, res) => {
 app.listen(PORT, () => {
     console.log(`App listening on port: ${PORT}`)
 })
+server.listen(2000, () =>{
+    console.log(`server listening on port: 2000`);
+})
+
 
 ////////////////////////////////// Database things //////////////////////////////////
 let DBclient = null;
@@ -229,6 +237,42 @@ async function insertDrawing(drawing) {
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
     await collection.insertOne(drawing)
 }
+
+////////////////////////////////// Communication Socket //////////////////////////////////
+
+const socketServer = new ws.Server({ server })
+const clients = []
+const clientObjects = []; //stores client objects for before we have a username
+socketServer.on( 'connection', client => {
+    // add client to client list and send first message
+    clientObjects.push(client)
+    client.send(
+        JSON.stringify({
+            value:'you have connected'
+            // we only initiate p2p if this is the second client connected
+            //initiator:++count % 2 === 0
+        })
+    )
+
+    // when the server receives a message from this client...
+    client.on( 'message', msg => {
+        console.log(msg);
+        let msgJson = JSON.parse(msg);
+        if(msgJson.type === "sendingUsername") {
+            clients.push({user:msgJson.username, client:client});
+            console.log(clients);
+        }
+        // send msg to every client EXCEPT
+        // the one who originally sent it. in this demo this is
+        // used to send p2p offer/answer signals between clients
+        clientObjects.forEach( c => {
+            if( c !== client )
+                c.send(JSON.stringify({sender: "testtesttest"} ))
+        })
+    })
+})
+
+
 
 ////////////////////////////////// Graceful Termination //////////////////////////////////
 function cleanup() {
