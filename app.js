@@ -4,6 +4,8 @@ const {MongoClient} = require('mongodb');
 const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
 const cookieSession = require('cookie-session')
+const favicon = require("serve-favicon");
+const bodyParser = require("body-parser");
 
 const PORT = 3000
 const app = express()
@@ -12,69 +14,10 @@ let date = new Date()
 let formattedDate = date.toLocaleDateString('en-US')
 
 
-let drawings = {
-    d1: {
-        title: 'The Ocean',
-        artist: 'JimBob212',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d2: {
-        title: 'Bell Peppers',
-        artist: 'PennyPancake',
-        img: 'images/drawings/four.jpeg',
-        date: formattedDate
-    },
-    d3: {
-        title: 'The Forest',
-        artist: 'ElvenWarrior34',
-        img: 'images/drawings/one.jpeg',
-        date: formattedDate
-    },
-    d4: {
-        title: 'The Ocean',
-        artist: 'CheerioMcB',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d5: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d6: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d7: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d8: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d9: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    },
-    d10: {
-        title: 'The Ocean',
-        artist: 'KenJakovis',
-        img: 'images/drawings/three.jpeg',
-        date: formattedDate
-    }
-}
+/////////////////////////////// General Middleware  ///////////////////////////////
 
+// serve favicon
+app.use(favicon(__dirname + "/public/images/favicon.ico"));
 
 // set template rendering engine to use handlebars
 app.engine('handlebars', exphbs())
@@ -114,28 +57,47 @@ app.use(passport.session())
 
 
 ////////////////////////////////// Routes //////////////////////////////////
+
+
+// ================ GET ================
+
+// home route
 app.get('/', (req, res) => {
-    if (req.user !== undefined && req.user !== null) {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
             console.log("logged in: " + user.username)
 
-            res.render('gallery', {
-                layout: false,
-                // populate page with data from database
-                userData: user
-            })
+            // send user data back
+            res.sendFile(__dirname + "/views/index.html");
         })
     }
     else {
-        res.render('gallery', {
-            layout: false,
-            // populate page with data from database
-            userData: {
-                username: "HScorpio92",
-                avatar: '/images/user_01.png',
-                flag: '/images/flags/mexico.png',
-                drawings: drawings
-            }
+        res.sendFile(__dirname + "/views/login.html");
+    }
+})
+
+// in case index.html specified
+app.get("/index.html", (req, res) => {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+            console.log("logged in: " + user.username)
+
+            // send user data back
+            res.sendFile(__dirname + "/views/index.html");
+        })
+    }
+    else {
+        res.sendFile(__dirname + "/views/login.html");
+    }
+})
+
+
+app.get('/mydata', (req, res) => {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+
+            // send user data back
+            res.json(user)
         })
     }
 })
@@ -150,16 +112,16 @@ app.get('/auth/github/callback',
                 // Create new entry in DB
                 upsertUser({
                     username: req.user.username,
-                    avatar: '/images/user_01.png',      // Some placeholder image here (maybe github icon?)
+                    avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
                     flag: '/images/flags/mexico.png',   // Grab flag from IP???
-                    drawings: {}
+                    friends: ["user1","user2","user3","user4","user5"]
                 }).then(res.redirect('/'))
             }
             else { // User found
                 res.redirect('/')
             }
         })
-    });
+    })
 
 app.get("/logout", (req, res) => {
     if (req.user !== undefined) {
@@ -167,8 +129,16 @@ app.get("/logout", (req, res) => {
         req.logOut();
     }
     res.redirect('/');
-});
+})
 
+// ================ POST ================
+
+app.post('/friend', bodyParser.json(),  (req, res) => {
+    getUser(req.body.friendUsername).then(friendData => {
+        // send friend data back
+        res.json(friendData)
+    })
+})
 
 // start listening on PORT
 app.listen(PORT, () => {
@@ -206,6 +176,3 @@ function cleanup() {
 
 process.on('SIGTERM', cleanup)
 process.on('SIGINT', cleanup)
-
-//upsertUser({username: "noahvolson", inbox: "FULL OF MAIL"})
-//getUser("noahvolson").then(r => console.log(r))
