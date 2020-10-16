@@ -104,12 +104,12 @@ app.get('/auth/github/callback',
         getUser(req.user.username).then(result => {
             if (result === null) {
                 //get country code for flag
-                ipCountryCodeToFlagPath(req).then((result) => {
+                ipToFlagPath(req).then((flagPath) => {
                     // Create new entry in DB
                     upsertUser({
                         username: req.user.username,
                         avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
-                        flag: `/images/flags/${result._countryCode}.png`,
+                        flag: flagPath,
                         friends: ["user1", "user2", "user3", "user4", "user5"]
                     }).then(res.redirect('/'))
                 })
@@ -220,15 +220,24 @@ async function insertDrawing(drawing) {
 const token = process.env.IPINFO_TOKEN
 const ipinfo = new IPinfo(token);
 
-async function ipCountryCodeToFlagPath(req) {
+async function ipToCountryCode(req) {
     let clientIP
     try {
         clientIP = req.headers['x-forwarded-for'].split(',')[0]
     } catch (TypeError) {
-        clientIP = '91.206.168.14'
+        console.log('no ip')
+        return null
     }
+    return ipinfo.lookupIp(clientIP)
+}
 
-    return await ipinfo.lookupIp(clientIP)
+async function ipToFlagPath(req) {
+    let cc = await ipToCountryCode()
+    if (cc === null) {
+        return `images/flags/PF.png`
+    } else {
+        return `images/flags/${cc._countryCode}.png`
+    }
 }
 
 
