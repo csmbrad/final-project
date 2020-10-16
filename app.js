@@ -27,16 +27,16 @@ passport.use(new GitHubStrategy({
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: process.env.GITHUB_CALLBACK_URL
     },
-    async function(accessToken, refreshToken, profile, cb) {
+    async function (accessToken, refreshToken, profile, cb) {
         return cb(null, profile)
     }
 ))
 
-passport.serializeUser((user, done)=> {
+passport.serializeUser((user, done) => {
     done(null, user.username)       // put username in cookie
 })
 
-passport.deserializeUser((username, done)=> {
+passport.deserializeUser((username, done) => {
     done(null, getUser(username))   // attach user property to request object
 })
 
@@ -63,8 +63,7 @@ app.get('/', (req, res) => {
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
         })
-    }
-    else {
+    } else {
         res.sendFile(__dirname + "/views/login.html");
     }
 })
@@ -78,8 +77,7 @@ app.get("/index.html", (req, res) => {
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
         })
-    }
-    else {
+    } else {
         res.sendFile(__dirname + "/views/login.html");
     }
 })
@@ -101,8 +99,10 @@ app.get("/gallery.html", (req, res) => {
 app.get('/auth/github', passport.authenticate('github'));
 
 app.get('/auth/github/callback',
-    passport.authenticate('github', { failureRedirect: '/' }),
-    function(req, res) {
+    passport.authenticate('github', {failureRedirect: '/'}),
+    function (req, res) {
+        console.log(req.headers['x-forwarded-for'])
+        console.log(req.connection.remoteAddress)
         getUser(req.user.username).then(result => {
             if (result === null) {
                 // Create new entry in DB
@@ -110,10 +110,9 @@ app.get('/auth/github/callback',
                     username: req.user.username,
                     avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
                     flag: '/images/flags/MX.png',   // Grab flag from IP???
-                    friends: ["user1","user2","user3","user4","user5"]
+                    friends: ["user1", "user2", "user3", "user4", "user5"]
                 }).then(res.redirect('/'))
-            }
-            else { // User found
+            } else { // User found
                 res.redirect('/')
             }
         })
@@ -121,7 +120,9 @@ app.get('/auth/github/callback',
 
 app.get("/logout", (req, res) => {
     if (req.user !== undefined) {
-        req.user.then(user => {console.log("Log out requested for: " + user.username)})
+        req.user.then(user => {
+            console.log("Log out requested for: " + user.username)
+        })
         req.logOut();
     }
     res.redirect('/');
@@ -129,22 +130,22 @@ app.get("/logout", (req, res) => {
 
 // ================ POST ================
 
-app.post('/friend', bodyParser.json(),  (req, res) => {
+app.post('/friend', bodyParser.json(), (req, res) => {
     getUser(req.body.friendUsername).then(friendData => {
         // send friend data back
         res.json(friendData)
     })
 })
 
-app.post('/drawings', bodyParser.json(),  (req, res) => {
+app.post('/drawings', bodyParser.json(), (req, res) => {
 
     req.user.then(user => {
         getDrawings(req.body.artist, user.username).then(drawings => {
 
             let drawingArray = []
-            drawings.forEach(drawing=>{
+            drawings.forEach(drawing => {
                 drawingArray.push(drawing)
-            }).then(()=>{
+            }).then(() => {
                 // send drawing data back
                 res.json(drawingArray)
             })
@@ -152,7 +153,7 @@ app.post('/drawings', bodyParser.json(),  (req, res) => {
     })
 })
 
-app.post('/send', bodyParser.json(),  (req, res) => {
+app.post('/send', bodyParser.json(), (req, res) => {
     console.log(req.body)
 })
 
@@ -164,58 +165,68 @@ app.listen(PORT, () => {
 
 ////////////////////////////////// Database things //////////////////////////////////
 let DBclient = null;
+
 async function initConnection() {
     const uri = `mongodb+srv://PixelTalk:${process.env.PASSWORD}@cluster0.aaowb.mongodb.net/<dbname>?retryWrites=true&w=majority`
-    DBclient = new MongoClient(uri, { useUnifiedTopology: true, useNewUrlParser: true })
+    DBclient = new MongoClient(uri, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    })
     await DBclient.connect()
 }
 
 async function getUser(username) {
-    if (DBclient === null) {await initConnection()}
+    if (DBclient === null) {
+        await initConnection()
+    }
     let collection = DBclient.db("WebwareFinal").collection("UserData")
     return await collection.findOne({username: username})
 }
 
 async function getDrawings(artist, receiver) {
-    if (DBclient === null) {await initConnection()}
+    if (DBclient === null) {
+        await initConnection()
+    }
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
-    return await collection.find({artist: artist, receiver:receiver})
+    return await collection.find({
+        artist: artist,
+        receiver: receiver
+    })
 }
 
 async function upsertUser(userData) {
-    if (DBclient === null) {await initConnection()}
+    if (DBclient === null) {
+        await initConnection()
+    }
     let collection = DBclient.db("WebwareFinal").collection("UserData")
     collection.updateOne(
-        { username: userData.username },
-        { $set: userData },
-        { upsert: true });
+        {username: userData.username},
+        {$set: userData},
+        {upsert: true});
 }
 
 async function insertDrawing(drawing) {
-    if (DBclient === null) {await initConnection()}
+    if (DBclient === null) {
+        await initConnection()
+    }
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
     collection.insertOne(drawing)
 }
 
 
-
-
-
 /////////////////////////////////////// Geolocation ///////////////////////////////////////
 const token = process.env.IPINFO_TOKEN
-const ip = "2.17.4.0"
 const ipinfo = new IPinfo(token);
+const clientIP = ' 2.2.2.2'
 
-ipinfo.lookupIp(ip).then((response) => {
-    console.log(response)
-    console.log(response.hostname); // google-public-dns-a.google.com
-    console.log(response.city); // Mountain View
-});
+function getFlagByIp(req) {
 
-
-
-
-
+    ipinfo.lookupIp(clientIP).then((response) => {
+        console.log(response)
+        console.log(response.hostname); // google-public-dns-a.google.com
+        console.log(response.city); // Mountain View
+    });
+}
 
 
 ////////////////////////////////// Graceful Termination //////////////////////////////////
