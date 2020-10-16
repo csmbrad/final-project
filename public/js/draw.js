@@ -89,7 +89,7 @@ canvas.addEventListener('mouseout', (event => {
 
 canvas.addEventListener('click', (event => {
     const title = document.querySelector('#drawingTitle')
-    let titleLength = title.value.length
+    let titleLength = 5 //title.value.length
 
     if(titleLength < 3){
         stop = true
@@ -182,7 +182,7 @@ document.querySelector('#closeDrawingWindow').addEventListener('click', () => {
 
 let timeRemaining = drawingTimeLimit
 
-function timer() {
+async function timer() {
     if (timeRemaining > 0) {
 
         timeRemaining--
@@ -196,6 +196,18 @@ function timer() {
 
         //upload drawing to server here
         let completedDrawing = canvas.toDataURL('image/png')
+
+        console.log(timerStarted)
+
+        await sendDrawing({
+            title: "PLACEHOLDER",
+            time: Date.now(),
+            receiver: "noahvolson",
+            URI: completedDrawing,
+            instructions: null
+        })
+
+
         // console.log(completedDrawing)
         // console.log(picture)
 
@@ -218,4 +230,13 @@ function timer() {
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
     }
+}
+
+
+function sendDrawing (drawing) {
+    return fetch("/send", {
+        method:"POST",
+        body:JSON.stringify(drawing),
+        headers: { "Content-Type": "application/json"}
+    })
 }

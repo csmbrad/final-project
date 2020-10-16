@@ -159,6 +159,11 @@ app.post('/drawings', bodyParser.json(),  (req, res) => {
     })
 })
 
+app.post('/send', bodyParser.json(),  (req, res) => {
+    console.log(req.body)
+})
+
+
 // start listening on PORT
 app.listen(PORT, () => {
     console.log(`App listening on port: ${PORT}`)
@@ -193,6 +198,13 @@ async function upsertUser(userData) {
         { upsert: true });
 }
 
+async function insertDrawing(drawing) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    collection.insertOne(drawing)
+}
+
+////////////////////////////////// Graceful Termination //////////////////////////////////
 function cleanup() {
     console.log("Cleaning up...")
     if (DBclient) DBclient.close()
@@ -201,9 +213,3 @@ function cleanup() {
 
 process.on('SIGTERM', cleanup)
 process.on('SIGINT', cleanup)
-
-////////////////////////////////// Misc helpers //////////////////////////////////
-
-function addDrawing() {
-
-}
