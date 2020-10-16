@@ -81,7 +81,6 @@ function getFriendData (friendUsername) {
 }
 
 async function recreate(picture) { 
-  
     const canvas = document.getElementById('loadImage')
     const ctx = canvas.getContext('2d')
     ctx.canvas.width = 300
@@ -104,8 +103,6 @@ async function recreate(picture) {
         ctx.beginPath()
         ctx.moveTo(aPoint.x, aPoint.y)
         pointCount++
-        console.log(pointCount)
-        console.log(currLine.points.length)
         if (pointCount === currLine.points.length - 1) {
           lineCount++
           pointCount = 0
