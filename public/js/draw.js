@@ -186,7 +186,7 @@ document.querySelector('#closeDrawingWindow').addEventListener('click', () => {
 
 let timeRemaining = drawingTimeLimit
 
-async function timer() {
+function timer() {
     if (timeRemaining > 0) {
         timeRemaining--
         //update timer element
@@ -196,14 +196,20 @@ async function timer() {
         //upload drawing to server here
         let dataURL= canvas.toDataURL('image/png')
         console.log(drawing)
-        await sendDrawing({
-            title: "PLACEHOLDER",
-            time: Date.now(),
-            artist: "",
-            receiver: "noahvolson",
-            URI: dataURL,
-            instructions: null
-        })
+
+        fetch("/send", {
+            method:"POST",
+            body:JSON.stringify(
+                {
+                    title: "PLACEHOLDER",
+                    time: Date.now(),
+                    receiver: "noahvolson",
+                    URI: dataURL,
+                    instructions: null
+                }
+            ),
+            headers: { "Content-Type": "application/json"}
+        }).then()
 
 
         //reset globals
@@ -227,12 +233,4 @@ async function timer() {
         document.querySelector('#closeDrawingWindow').click()
 
     }
-}
-
-function sendDrawing (drawing) {
-    return fetch("/send", {
-        method:"POST",
-        body:JSON.stringify(drawing),
-        headers: { "Content-Type": "application/json"}
-    })
 }
