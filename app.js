@@ -143,6 +143,19 @@ app.post('/friend', bodyParser.json(),  (req, res) => {
     })
 })
 
+app.post('/drawings', bodyParser.json(),  (req, res) => {
+    getDrawings(req.body.artist, req.body.reciever).then(drawings => {
+
+        let drawingArray = []
+        drawings.forEach(drawing=>{
+            drawingArray.push(drawing)
+        }).then(()=>{
+                // send drawing data back
+                res.json(drawingArray)
+        })
+    })
+})
+
 // start listening on PORT
 app.listen(PORT, () => {
     console.log(`App listening on port: ${PORT}`)
@@ -162,6 +175,12 @@ async function getUser(username) {
     return await collection.findOne({username: username})
 }
 
+async function getDrawings(artist, reciever) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    return await collection.find({artist: artist, reciever: reciever})
+}
+
 async function upsertUser(userData) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("UserData")
@@ -179,3 +198,9 @@ function cleanup() {
 
 process.on('SIGTERM', cleanup)
 process.on('SIGINT', cleanup)
+
+////////////////////////////////// Misc helpers //////////////////////////////////
+
+function addDrawing() {
+
+}
