@@ -21,7 +21,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark  bg-dark">
 
         <a type=" button" id="btnHome" href="index.html"
-                class="btn btn-light btn-lg">
+           class="btn btn-light btn-lg">
             <img id="homeIcon" src="/images/nav/home.svg">
         </a>
 
@@ -32,7 +32,8 @@
                     <div class="col-sm align-self-start">
                         <form class="form-group">
                             <img src=/images/flags/blank_flag.png id="userFlag">
-                            <img src=/images/placeholder_avatar.png id="userAvatar">
+                            <img src=/images/placeholder_avatar.png
+                                 id="userAvatar">
                         </form>
                     </div>
                 </li>
@@ -43,8 +44,9 @@
         </div>
 
         <div class="row">
-            <a type=" button" id="btnGallery"
-                    class="btn btn-light btn-lg mr-2 mr-2" data-toggle="modal" data-target="#drawingModal">
+            <a type=" button" id="btnDraw"
+               class="btn btn-light btn-lg mr-2 mr-2" data-toggle="modal"
+               data-target="#drawingModal">
                 <img id="pencilIcon" src="/images/nav/pencil.svg">
             </a>
             <a type=" button" id="btnLogout" href="/logout"
@@ -53,8 +55,7 @@
         </div>
 
 
-
-        <!-- Modal -->
+        <!-- Drawing Modal -->
         <div class="modal text-black" id="drawingModal" tabindex="-1"
              role="dialog">
             <div class="modal-dialog modal-md modal-dialog-centered"
@@ -67,7 +68,10 @@
                             <div class="col-md-center">
                                 <div class="col-md-center">
                                     <div class="input-group mb-3">
-                                        <input type="text" placeholder="Recipient..." id="myInput" onkeyup="filterFunction()">
+                                        <input type="text"
+                                               placeholder="Recipient..."
+                                               id="myInput"
+                                               onkeyup="filterFunction()">
                                     </div>
                                     <div class="input-group mb-3">
                                         <input id="drawingTitle" type="text"
@@ -80,7 +84,8 @@
 
                                 <div class="row">
                                     <div class="col">
-                                        <canvas id="messageCanvas" height="300px"
+                                        <canvas id="messageCanvas"
+                                                height="300px"
                                                 width="300px"></canvas>
                                     </div>
 
@@ -88,27 +93,36 @@
                                         <div class="btn-group-vertical">
                                             <button type="button" id="color_red"
                                                     style="background-color: red"></button>
-                                            <button type="button" id="color_orange"
+                                            <button type="button"
+                                                    id="color_orange"
                                                     style="background-color: orange"></button>
-                                            <button type="button" id="color_yellow"
+                                            <button type="button"
+                                                    id="color_yellow"
                                                     style="background-color: yellow"></button>
-                                            <button type="button" id="color_green"
+                                            <button type="button"
+                                                    id="color_green"
                                                     style="background-color: green"></button>
-                                            <button type="button" id="color_blue"
+                                            <button type="button"
+                                                    id="color_blue"
                                                     style="background-color: blue"></button>
-                                            <button type="button" id="color_purple"
+                                            <button type="button"
+                                                    id="color_purple"
                                                     style="background-color: purple"></button>
-                                            <button type="button" id="color_pink"
+                                            <button type="button"
+                                                    id="color_pink"
                                                     style="background-color: pink"></button>
-                                            <button type="button" id="color_white"
+                                            <button type="button"
+                                                    id="color_white"
                                                     style="background-color: white"></button>
-                                            <button type="button" id="color_black"
+                                            <button type="button"
+                                                    id="color_black"
                                                     style="background-color: black"></button>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="slider-wrapper">
-                                            <input type="range" min="1" max="100"
+                                            <input type="range" min="1"
+                                                   max="100"
                                                    value="50" class="slider"
                                                    id="penSize">
                                         </div>
@@ -138,6 +152,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Display Modal -->
+        <div class="modal text-black" id="displayModal" tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog modal-md modal-dialog-centered"
+                 role="document">
+
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container">
+
+                            <div class="row">
+                                <canvas id="displayCanvas" height="300px"
+                                        width="300px"></canvas>
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="button"
+                            class="btn btn-danger" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
     </nav>
 </header>
 
@@ -145,10 +186,9 @@
 
 <div class="gallery py-5">
     <div class="container">
-        <main id="gallery" class="row">
+        <div id="gallery" class="card-group">
 
-        </main>
-
+        </div>
     </div>
 </div>
 

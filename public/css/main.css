@@ -31,7 +31,7 @@
     width: 200px;
 }
 
-#btnGallery, #btnHome, #btnSend, #btnLogout {
+#btnGallery, #btnHome, #btnDraw, #btnLogout {
     height: 75px;
 }
 
@@ -58,7 +58,7 @@
 
 /* Gallery Styling */
 .card{
-    margin: .5em;
+    margin: 1em;
 }
 
 #galleryThumb{
