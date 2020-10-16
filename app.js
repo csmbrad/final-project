@@ -161,7 +161,9 @@ app.post('/drawings', bodyParser.json(),  (req, res) => {
 })
 
 app.post('/send', bodyParser.json(),  (req, res) => {
-    console.log(req.body)
+    req.body.artist = 'user1' // TODO REPLACE WITH CLIENT USERNAME
+    //console.log(req.body)
+    insertDrawing(req.body).then()
 })
 
 
@@ -202,7 +204,7 @@ async function upsertUser(userData) {
 async function insertDrawing(drawing) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("Drawings")
-    collection.insertOne(drawing)
+    await collection.insertOne(drawing)
 }
 
 ////////////////////////////////// Graceful Termination //////////////////////////////////

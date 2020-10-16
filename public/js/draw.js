@@ -195,7 +195,7 @@ function timer() {
 
         //upload drawing to server here
         let dataURL= canvas.toDataURL('image/png')
-        console.log(drawing)
+        console.log(picture)
 
         fetch("/send", {
             method:"POST",
@@ -203,9 +203,10 @@ function timer() {
                 {
                     title: document.getElementById("drawingTitle").value,
                     time: Date.now(),
+                    artist: "",
                     receiver: document.getElementById("myInput").value,
                     URI: dataURL,
-                    instructions: null
+                    instructions: picture
                 }
             ),
             headers: { "Content-Type": "application/json"}
