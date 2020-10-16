@@ -183,8 +183,8 @@ function timer() {
     } else {
 
         //upload drawing to server here
-        let drawing = canvas.toDataURL('image/png')
-        console.log(drawing)
+        let imageData = canvas.toDataURL('image/png')
+        console.log(imageData)
 
 
         //reset time remaining
