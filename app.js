@@ -1,5 +1,4 @@
 const express = require('express')
-const exphbs = require('express-handlebars')
 const {MongoClient} = require('mongodb');
 const passport = require("passport");
 const GitHubStrategy = require('passport-github').Strategy
@@ -10,18 +9,12 @@ const bodyParser = require("body-parser");
 const PORT = 3000
 const app = express()
 
-let date = new Date()
-let formattedDate = date.toLocaleDateString('en-US')
 
 
 /////////////////////////////// General Middleware  ///////////////////////////////
 
 // serve favicon
 app.use(favicon(__dirname + "/public/images/favicon.ico"));
-
-// set template rendering engine to use handlebars
-app.engine('handlebars', exphbs())
-app.set('view engine', 'handlebars')
 
 
 // server static files from dir 'public'
@@ -77,8 +70,6 @@ app.get('/', (req, res) => {
 })
 
 // gallery route
-
-// in case index.html specified
 app.get("/gallery.html", (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {

@@ -26,6 +26,11 @@
 }
 
 /* Buttons */
+
+#btnLogin{
+    width: 200px;
+}
+
 #btnGallery, #btnHome, #btnSend, #btnLogout {
     height: 75px;
 }
