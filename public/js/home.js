@@ -4321,7 +4321,7 @@ function getFriendData (friendUsername) {
         })
 }
 
-function recreate(picture) { 
+async function recreate(picture) { 
     const canvas = document.getElementById('loadImage')
     const ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -4329,17 +4329,39 @@ function recreate(picture) {
     ctx.canvas.height = 300
     ctx.lineWidth = 10
     ctx.imageSmoothingEnabled = true
-    for (let stroke of picture.strokes) {
+    let stroke
+
+    for (stroke of picture.strokes) {
         ctx.lineWidth = stroke.brushSize
         ctx.strokeStyle = stroke.brushColor
         ctx.lineCap = 'round'
-        for (let myPoint of stroke.points) {
-            ctx.lineTo(myPoint.x, myPoint.y)
-            ctx.stroke()
-            ctx.beginPath()
-            ctx.moveTo(myPoint.x, myPoint.y)
-        }
         ctx.beginPath()
+        await doAnimate(stroke)
+        console.log(stroke)
     }
+    console.log("made it")
+
+
+    async function drawPoint(x, y){
+        ctx.lineTo(x, y)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+    }
+
+    async function doAnimate(line) {
+        return new Promise(async () => {
+            for (let myPoint of line.points) {
+                await timeout(10)
+                await drawPoint(myPoint.x,myPoint.y)
+            }
+        })
+    }
+
+    async function timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
 }
 
