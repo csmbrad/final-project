@@ -76,6 +76,23 @@ app.get('/', (req, res) => {
     }
 })
 
+// gallery route
+
+// in case index.html specified
+app.get("/gallery.html", (req, res) => {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+            console.log("logged in: " + user.username)
+
+            // send user data back
+            res.sendFile(__dirname + "/views/gallery.html");
+        })
+    }
+    else {
+        res.sendFile(__dirname + "/views/login.html");
+    }
+})
+
 // in case index.html specified
 app.get("/index.html", (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in

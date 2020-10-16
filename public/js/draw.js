@@ -88,8 +88,18 @@ canvas.addEventListener('mouseout', (event => {
 }))
 
 canvas.addEventListener('click', (event => {
+    const title = document.querySelector('#drawingTitle')
+    let titleLength = title.value.length
 
-    if (!timerStarted) {
+    if(titleLength < 3){
+        stop = true
+        alert("Title must be longer than 2 characters")
+        ctx.fillStyle = DEFAULTCOLOR
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+    }
+
+    else if (!timerStarted && titleLength >=3) {
 
         //start timer
         drawingTimeout = setInterval(timer, 1000)
@@ -98,6 +108,7 @@ canvas.addEventListener('click', (event => {
         //disable closing window after starting a drawing
         document.querySelector('#closeDrawingWindow').disabled = true
     }
+
     else if (inFrame) {
         pCoords = trueCoordinates(event)
         // let pointStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
@@ -183,22 +194,22 @@ function timer() {
     } else {
 
         //upload drawing to server here
-        let drawing = canvas.toDataURL('image/png')
+        let dataURL= canvas.toDataURL('image/png')
         console.log(drawing)
 
-
-        //reset time remaining
+        //reset globals
+        stop = true;
+        picture = new drawing()
+        timerStarted = false
         timeRemaining = drawingTimeLimit
-        document.querySelector('#drawingTimer').innerHTML = ''
 
         //clear setTimeout
         clearTimeout(drawingTimeout)
 
-        //reset timer flag
-        timerStarted = false
 
-        //stop drawing
-        stop = true;
+
+        //clear timer
+        document.querySelector('#drawingTimer').innerText = ''
 
         //enable the close button
         document.querySelector('#closeDrawingWindow').disabled = false
@@ -206,6 +217,5 @@ function timer() {
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
 
-        picture = new drawing()
     }
 }

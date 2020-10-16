@@ -1,22 +1,38 @@
-
-
-.card{
-    margin: .5em;
+/* Icons */
+#homeIcon{
+    width:40px;
+    padding-top: 8px;
 }
 
-#galleryThumb{
-    background-color: white;
+#galleryIcon{
+    padding-top: 8px;
+    width: 40px;
 }
 
-#drawingTimer{
-    color: black;
-    padding-left: 4px;
+#pencilIcon{
+    width: 40px;
+    padding-top: 8px;
 }
 
-canvas {
-    border: 2px black solid;
+#homeIcon{
+    width: 40px;
 }
 
+
+#btnLogout{
+    height: 75px;
+    padding-top: 20px;
+
+}
+
+/* Buttons */
+#btnGallery, #btnHome, #btnSend, #btnLogout {
+    height: 75px;
+}
+
+
+
+/* User Info */
 #userHandle{
     margin-top: 10px;
 }
@@ -34,19 +50,27 @@ canvas {
 
 }
 
-#btnHome{
-    border: 1px solid black;
-    height: 75px;
-}
 
-#btnSend{
-    border: 1px solid black;
-    height: 75px;
+/* Gallery Styling */
+.card{
+    margin: .5em;
 }
 
 #galleryThumb{
+    background-color: white;
     filter: blur(15px);
     -webkit-filter: blur(15px);
+}
+
+
+/* Drawing Modal Styling */
+#drawingTimer{
+    color: black;
+    padding-left: 4px;
+}
+
+canvas {
+    border: 2px black solid;
 }
 
 [id^="color_"]{
@@ -57,11 +81,15 @@ canvas {
 #colorPicker{
     margin-left: -30px;
 }
+
+
+/* Slider Styling */
 .slider-wrapper {
     display: block;
     width: 2px;
     height: 1px;
 }
+
 .slider-wrapper input {
     border: 1px black solid;
     width: 300px;
