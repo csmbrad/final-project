@@ -5,13 +5,15 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/draw.js" defer></script>
     <script src="js/home.js" defer></script>
     <title>Pixel Talk</title>
 
@@ -19,84 +21,38 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark  bg-dark">
-        <div class="container-fluid">
-            <div>
-                <button type=" button" id="btnHome"
-                        class="btn btn-light btn-lg">
-                    <img src="/images/nav/home.svg" width="40px">
-                </button>
-                <a class="navbar-brand" href="#">
-                    <img src=/images/flags/blank_flag.png id="userFlag">
-                    <img src=/images/placeholder_avatar.png id="userAvatar">
-                    <span id="userHandle" class="text-light"></span>
-                </a>
-                <a href="/logout"><span class="text-light">logout</span></a>
-            </div>
-            <button type="button" id="btnSend"
-                    class="btn btn-light btn-lg my-2 my-sm-0"
-                    data-toggle="modal" data-target="#drawingModalCenter">
-                <img src="/images/nav/arrow.svg" width="40px">
-            </button>
+
+        <a type=" button" id="btnHome"
+           class="btn btn-light btn-lg">
+            <img id="homeIcon" src="/images/nav/home.svg">
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item active">
+                    <div class="col-sm align-self-start">
+                        <form class="form-group">
+                            <img src=/images/flags/blank_flag.png id="userFlag">
+                            <img src=/images/placeholder_avatar.png
+                                 id="userAvatar">
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <h1 id="userHandle" class="text-light"></h1>
+                </li>
+            </ul>
         </div>
 
-        <!-- Modal -->
-        <div class="modal text-black" id="drawingModalCenter" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="container-fluid">
-
-                            <div class="row">
-                                <div class="col">
-                                    <canvas id="messageCanvas" height="300px" width="300px"></canvas>
-                                </div>
-
-                                <div class="col" id="colorPicker">
-                                    <div class="btn-group-vertical">
-                                        <button type="button" id="color_red"
-                                                style="background-color: red"></button>
-                                        <button type="button" id="color_orange"
-                                                style="background-color: orange"></button>
-                                        <button type="button" id="color_yellow"
-                                                style="background-color: yellow"></button>
-                                        <button type="button" id="color_green"
-                                                style="background-color: green"></button>
-                                        <button type="button" id="color_blue"
-                                                style="background-color: blue"></button>
-                                        <button type="button" id="color_purple"
-                                                style="background-color: purple"></button>
-                                        <button type="button" id="color_pink"
-                                                style="background-color: pink"></button>
-                                        <button type="button" id="color_white"
-                                                style="background-color: white"></button>
-                                        <button type="button" id="color_black"
-                                                style="background-color: black"></button>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="slider-wrapper">
-                                        <input type="range" min="1" max="100" value="50" class="slider" id="penSize">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="col">
-                            <h2 id="drawingTimer"></h2>
-                        </div>
-                        <button type="button" class="btn btn-primary" data-container="body"
-                                data-toggle="popover" data-placement="right"
-                                data-content="Time starts after the first line is drawn.">?
-                        </button>
-                        <button type="button" id="closeDrawingWindow" class="btn btn-danger" data-dismiss="modal">
-                            Close
-                        </button>
-
-                    </div>
-                </div>
-            </div>
+        <div class="row">
+            <a type=" button" id="btnGallery" href="gallery.html"
+               class="btn btn-light btn-lg mr-2">
+                <img id="galleryIcon" src="/images/nav/envelope.svg">
+            </a>
+            <a type=" button" id="btnLogout" href="/logout"
+               class="btn btn-light btn-lg mr-2">Logout
+            </a>
         </div>
     </nav>
 </header>

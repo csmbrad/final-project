@@ -1,7 +1,7 @@
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
 
-
+console.log("hello world :o");
 
 // client-side js, loaded by index.html
 // run by the browser each time the page is loaded
@@ -83,13 +83,13 @@ canvas.addEventListener('mouseout', (event => {
     if (currentStroke.points.length > 0) {
         picture.appendStroke(currentStroke)
         currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
-
+        console.log(picture)
     }
 }))
 
 canvas.addEventListener('click', (event => {
     const title = document.querySelector('#drawingTitle')
-    let titleLength = 5 //title.value.length
+    let titleLength = title.value.length
 
     if(titleLength < 3){
         stop = true
@@ -111,6 +111,9 @@ canvas.addEventListener('click', (event => {
 
     else if (inFrame) {
         pCoords = trueCoordinates(event)
+        // let pointStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
+        // pointStroke.appendPoint(pCoords)
+        // picture.appendStroke(pointStroke)
         draw(pCoords.x, pCoords.y)
         ctx.beginPath()
     }
@@ -138,7 +141,7 @@ canvas.addEventListener('mouseup', (event => {
     if (currentStroke.points.length > 0) {
         picture.appendStroke(currentStroke)
         currentStroke = new stroke(ctx.strokeStyle, ctx.lineWidth)
-
+        console.log(picture)
     }
 }))
 
@@ -152,6 +155,7 @@ function trueCoordinates(event) {
 
 function draw(x, y) {
     ctx.lineCap = 'round';
+    //ctx.bezierCurveTo(pCoords2.xLoc, pCoords2.yLoc, pCoords.xLoc, pCoords.yLoc,x,y)
     ctx.lineTo(x, y)
     ctx.stroke()
     ctx.beginPath()
@@ -184,54 +188,46 @@ let timeRemaining = drawingTimeLimit
 
 async function timer() {
     if (timeRemaining > 0) {
-
         timeRemaining--
-
         //update timer element
         document.querySelector('#drawingTimer').innerHTML = `${timeRemaining}s`
     } else {
 
-        //stop drawing
-        stop = true;
-
         //upload drawing to server here
-        let completedDrawing = canvas.toDataURL('image/png')
-
-        console.log(timerStarted)
-
+        let dataURL= canvas.toDataURL('image/png')
+        console.log(drawing)
         await sendDrawing({
             title: "PLACEHOLDER",
             time: Date.now(),
+            artist: "",
             receiver: "noahvolson",
-            URI: completedDrawing,
+            URI: dataURL,
             instructions: null
         })
 
 
-        // console.log(completedDrawing)
-        // console.log(picture)
-
-        //reset time remaining
+        //reset globals
+        stop = true;
+        picture = new drawing()
+        timerStarted = false
         timeRemaining = drawingTimeLimit
-        document.querySelector('#drawingTimer').innerHTML = ''
 
         //clear setTimeout
         clearTimeout(drawingTimeout)
 
-        //reset timer flag
-        timerStarted = false
 
-        //ready canvas for a new drawing
-        picture = new drawing()
+
+        //clear timer
+        document.querySelector('#drawingTimer').innerText = ''
 
         //enable the close button
         document.querySelector('#closeDrawingWindow').disabled = false
 
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
+
     }
 }
-
 
 function sendDrawing (drawing) {
     return fetch("/send", {
