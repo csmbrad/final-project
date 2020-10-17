@@ -248,7 +248,6 @@ async function ipToFlagPath(req) {
     }
 }
 
-
 ////////////////////////////////// Graceful Termination //////////////////////////////////
 function cleanup() {
     console.log("Cleaning up...")
