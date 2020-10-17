@@ -191,7 +191,7 @@ function timer() {
 
         let dataURL= canvas.toDataURL('image/png')
         console.log(picture)
-        let data = {title:title, artist:artist, receiver:receiver, URI:dataURL, Instructions:picture}
+        let data = {title:title, artist:artist, receiver:receiver, URI:dataURL, instructions:picture}
         uploadDrawing(data).then((res)=>{
             console.log('Uploaded')
         })

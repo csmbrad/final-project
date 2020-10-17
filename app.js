@@ -143,7 +143,7 @@ app.get('/auth/github/callback',
                         username: req.user.username,
                         avatar: '/images/placeholder_avatar.png',      // Some placeholder image here (maybe github icon?)
                         flag: flagPath,
-                        friends: ["user1", "user2", "user3", "user4", "user5"]
+                        friends: ["noahvolson", "csmbrad", "excitinglyplain", "carlypereira"]
                     }).then(res.redirect('/'))
                 })
             } else { // User found

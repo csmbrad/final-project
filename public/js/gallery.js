@@ -9,7 +9,7 @@ fetch("/mydata")
         document.getElementById("userHandle").innerText = json.username
     })
 updateGalleryDisplay().then()
-
+initReceiverSocket();
 console.log(sessionStorage.getItem("friendData"))
 
 async function updateGalleryDisplay() {
@@ -33,7 +33,8 @@ async function updateGalleryDisplay() {
         let currLine = picture.strokes[lineCount]
         let aPoint
         let pointCount = 0
-
+        ctx.strokeStyle = currLine.brushColor
+        ctx.lineWidth = currLine.brushSize
         function draw() {
             if (currLine !== undefined) {
                 ctx.lineCap = 'round'
