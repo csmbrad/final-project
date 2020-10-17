@@ -240,7 +240,7 @@ async function ipToCountryCode(req) {
 }
 
 async function ipToFlagPath(req) {
-    let cc = await ipToCountryCode()
+    let cc = await ipToCountryCode(req)
     if (cc === null) {
         return `images/flags/PF.png`
     } else {
