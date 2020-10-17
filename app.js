@@ -272,14 +272,18 @@ socketServer.on( 'connection', client => {
                 clients.push({user:msgJson.username, client:client});
             }
         } else if (msgJson.type === "notification") {
+
             //notify the client that is the target of the message that they have a new message.
             //client might not currently be connected, in that case we don't send to them because bad.
             // loop through the list of active clients to try to find them
             // if the user isn't found, just don't send and move on with life
             for(let i = 0; i < clients.length; i++) {
+
                 if(clients[i].user === msgJson.receiver) {
+
                     try {
                         clients[i].client.send(JSON.stringify({sender:msgJson.sender}))
+                        console.log("notification sent!")
                     } catch {
                         //the user we tried to send to isn't online, remove them.
                         console.log("user " + clients[i].user + " is offline");

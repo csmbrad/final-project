@@ -203,7 +203,7 @@ function timer() {
             ),
             headers: { "Content-Type": "application/json"}
         }).then()
-        notifyReceiver(document.getElementById("myInput").value);
+        notifyReceiver(document.getElementById("myInput").value).then();
         console.log("got here");
         //reset globals
         stop = true;
