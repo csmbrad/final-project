@@ -67,3 +67,4 @@ Jake Pelrah & Patrick Houlihan
 The drawing application is utilized in three different areas of the project, to produce profile pictures, produce images to send, and recreate and animate images. Images are exported as PNG's as well as instruction sets, which are understood by the drawing program.
 
 ## Project Video
+[https://drive.google.com/file/d/1O8od8FDLdK8y3BQf3EyA1Va-HuHonBJ8/view?usp=sharing](https://drive.google.com/file/d/1O8od8FDLdK8y3BQf3EyA1Va-HuHonBJ8/view?usp=sharing)
