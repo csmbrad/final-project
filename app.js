@@ -187,7 +187,8 @@ app.post('/drawings', bodyParser.json(),  (req, res) => {
 
 
 app.post('/uploadDrawing', bodyParser.json(), (req, res)=> {
-       insertDrawing(req.body).then(()=>{
+
+        insertDrawing(req.body).then(()=>{
            console.log(`Added ${req.body}`)
        })
     }

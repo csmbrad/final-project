@@ -194,8 +194,8 @@ function timer() {
         let data = {title:title, artist:artist, receiver:receiver, URI:dataURL, instructions:picture}
         uploadDrawing(data).then((res)=>{
             console.log('Uploaded')
-        })
-
+        }).then()
+        notifyReceiver(document.getElementById("receiver").value).then();
         //reset globals
         stop = true
         picture = new drawing()
