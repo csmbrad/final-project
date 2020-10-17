@@ -195,7 +195,7 @@ function timer() {
                 {
                     title: document.getElementById("drawingTitle").value,
                     time: Date.now(),
-                    artist: "",
+                    artist: document.getElementById("userHandle").innerText,
                     receiver: document.getElementById("myInput").value,
                     URI: dataURL,
                     instructions: picture
@@ -203,8 +203,8 @@ function timer() {
             ),
             headers: { "Content-Type": "application/json"}
         }).then()
-
-
+        notifyReceiver(document.getElementById("myInput").value);
+        console.log("got here");
         //reset globals
         stop = true;
         picture = new drawing()

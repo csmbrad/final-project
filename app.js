@@ -182,7 +182,6 @@ app.post('/drawings', bodyParser.json(),  (req, res) => {
 })
 
 app.post('/send', bodyParser.json(),  (req, res) => {
-    req.body.artist = 'user1' // TODO REPLACE WITH CLIENT USERNAME
     //console.log(req.body)
     insertDrawing(req.body).then()
 })
@@ -259,33 +258,36 @@ socketServer.on( 'connection', client => {
         console.log(msg);
         let msgJson = JSON.parse(msg);
         if(msgJson.type === "sendingUsername") {
-            //TODO: See if someone already exists with this username. if so, replace their client
+            // See if someone already exists with this username. if so, replace their client
             // object with the new one.
             let userExists = false;
             for(let i = 0; i < clients.length; i++) {
                 if(clients[i].user === msgJson.username) {
                     clients[i].client = client;
+                    userExists = true;
+                    break;
                 }
             }
-            clients.push({user:msgJson.username, client:client});
-        } else if (msgJson.type = "notification") {
+            if(!userExists) {
+                clients.push({user:msgJson.username, client:client});
+            }
+        } else if (msgJson.type === "notification") {
             //notify the client that is the target of the message that they have a new message.
             //client might not currently be connected, in that case we don't send to them because bad.
-            //TODO: loop through the list of active clients to try to find them
+            // loop through the list of active clients to try to find them
             // if the user isn't found, just don't send and move on with life
-        }
-        // send msg to every client EXCEPT
-        // the one who originally sent it. in this demo this is
-        // used to send p2p offer/answer signals between clients
-        clientObjects.forEach( c => {
-            if( c !== client )
-                try{
-                    c.send(JSON.stringify({sender: "testtesttest"} ))
-                } catch {
-                console.log("someone disconnected");
-                //remove them from the users.
+            for(let i = 0; i < clients.length; i++) {
+                if(clients[i].user === msgJson.receiver) {
+                    try {
+                        clients[i].client.send(JSON.stringify({sender:msgJson.sender}))
+                    } catch {
+                        //the user we tried to send to isn't online, remove them.
+                        console.log("user " + clients[i].user + " is offline");
+                        clients.splice(i, 1);
+                    }
                 }
-        })
+            }
+        }
     })
 })
 
