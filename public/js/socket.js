@@ -1,5 +1,5 @@
-window.onload = function() {
-    let ws;
+let ws;
+function initSocket(){
     const socketReady = new Promise((resolve, reject) => {
         ws = new WebSocket(`ws://localhost:2000`);
         ws.onopen = () => {

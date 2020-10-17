@@ -8,7 +8,8 @@ fetch("/mydata")
         document.getElementById("userHandle").innerText = json.username
         updateFriendsDisplay(json).then()
     })
-
+initSocket();
+console.log("ws is " + ws);
 
 async function updateFriendsDisplay(myData) {
 

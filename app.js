@@ -241,7 +241,7 @@ async function insertDrawing(drawing) {
 ////////////////////////////////// Communication Socket //////////////////////////////////
 
 const socketServer = new ws.Server({ server })
-const clients = []
+const clients = [] //has usernames attached to client objects.
 const clientObjects = []; //stores client objects for before we have a username
 socketServer.on( 'connection', client => {
     // add client to client list and send first message
@@ -259,15 +259,32 @@ socketServer.on( 'connection', client => {
         console.log(msg);
         let msgJson = JSON.parse(msg);
         if(msgJson.type === "sendingUsername") {
+            //TODO: See if someone already exists with this username. if so, replace their client
+            // object with the new one.
+            let userExists = false;
+            for(let i = 0; i < clients.length; i++) {
+                if(clients[i].user === msgJson.username) {
+                    clients[i].client = client;
+                }
+            }
             clients.push({user:msgJson.username, client:client});
-            console.log(clients);
+        } else if (msgJson.type = "notification") {
+            //notify the client that is the target of the message that they have a new message.
+            //client might not currently be connected, in that case we don't send to them because bad.
+            //TODO: loop through the list of active clients to try to find them
+            // if the user isn't found, just don't send and move on with life
         }
         // send msg to every client EXCEPT
         // the one who originally sent it. in this demo this is
         // used to send p2p offer/answer signals between clients
         clientObjects.forEach( c => {
             if( c !== client )
-                c.send(JSON.stringify({sender: "testtesttest"} ))
+                try{
+                    c.send(JSON.stringify({sender: "testtesttest"} ))
+                } catch {
+                console.log("someone disconnected");
+                //remove them from the users.
+                }
         })
     })
 })
