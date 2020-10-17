@@ -66,7 +66,6 @@ app.use(passport.session())
 app.get('/', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
-            console.log("logged in: " + user.username)
 
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
@@ -81,7 +80,6 @@ app.get('/', (req, res) => {
 app.get("/index.html", (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
         req.user.then(user => {
-            console.log("logged in: " + user.username)
 
             // send user data back
             res.sendFile(__dirname + "/views/index.html");
@@ -92,6 +90,9 @@ app.get("/index.html", (req, res) => {
     }
 })
 
+app.get("/gallery.html", (req, res) => {
+    res.sendFile(__dirname + "/views/gallery.html");
+})
 
 app.get('/mydata', (req, res) => {
     if (req.user !== undefined && req.user !== null) { // if user has logged in
@@ -99,6 +100,26 @@ app.get('/mydata', (req, res) => {
 
             // send user data back
             res.json(user)
+        })
+    }
+})
+
+app.get("/inbox", (req, res) => {
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        req.user.then(user => {
+
+
+            // send user's inbox back
+            getInbox(user.username).then(drawings => {
+
+                let drawingArray = []
+                drawings.forEach(drawing=>{
+                    drawingArray.push(drawing)
+                }).then(()=>{
+                    // send drawing data back
+                    res.json(drawingArray)
+                })
+            })
         })
     }
 })
@@ -126,7 +147,6 @@ app.get('/auth/github/callback',
 
 app.get("/logout", (req, res) => {
     if (req.user !== undefined) {
-        req.user.then(user => {console.log("Log out requested for: " + user.username)})
         req.logOut();
     }
     res.redirect('/');
@@ -139,6 +159,46 @@ app.post('/friend', bodyParser.json(),  (req, res) => {
         // send friend data back
         res.json(friendData)
     })
+})
+
+app.post('/drawings', bodyParser.json(),  (req, res) => {
+
+    req.user.then(user => {
+        getConversation(req.body.artist, user.username).then(drawings => {
+
+            let drawingArray = []
+            drawings.forEach(drawing=>{
+                drawingArray.push(drawing)
+            }).then(()=>{
+                // send drawing data back
+                res.json(drawingArray)
+            })
+        })
+    })
+})
+
+app.post('/send', bodyParser.json(),  (req, res) => {
+    req.body.artist = 'user1' // TODO REPLACE WITH CLIENT USERNAME
+    //console.log(req.body)
+    insertDrawing(req.body).then()
+})
+
+app.post('/pfp', bodyParser.json(),  (req, res) => {
+    //console.log(req)
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        
+        req.user.then(user => {
+            let updatedUser = {
+                username: user.username,
+                avatar: req.body.avatar,      // Some placeholder image here (maybe github icon?)
+                flag: user.flag,   // Grab flag from IP???
+                friends: user.friends
+            }
+            console.log(updatedUser)
+            upsertUser(updatedUser)
+                .then(res.json(updatedUser))
+        })
+    }
 })
 
 // start listening on PORT
@@ -160,6 +220,18 @@ async function getUser(username) {
     return await collection.findOne({username: username})
 }
 
+async function getConversation(artist, receiver) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    return await collection.find({artist: artist, receiver:receiver})
+}
+
+async function getInbox(receiver) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    return await collection.find({receiver:receiver})
+}
+
 async function upsertUser(userData) {
     if (DBclient === null) {await initConnection()}
     let collection = DBclient.db("WebwareFinal").collection("UserData")
@@ -169,6 +241,13 @@ async function upsertUser(userData) {
         { upsert: true });
 }
 
+async function insertDrawing(drawing) {
+    if (DBclient === null) {await initConnection()}
+    let collection = DBclient.db("WebwareFinal").collection("Drawings")
+    await collection.insertOne(drawing)
+}
+
+////////////////////////////////// Graceful Termination //////////////////////////////////
 function cleanup() {
     console.log("Cleaning up...")
     if (DBclient) DBclient.close()

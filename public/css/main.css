@@ -1,13 +1,74 @@
+/* Icons */
+#homeIcon{
+    width:40px;
+    padding-top: 8px;
+}
+
+#galleryIcon{
+    padding-top: 8px;
+    width: 40px;
+}
+
+#pencilIcon{
+    width: 40px;
+    padding-top: 8px;
+}
+
+#homeIcon{
+    width: 40px;
+}
 
 
+#btnLogout{
+    height: 75px;
+    padding-top: 20px;
+
+}
+
+/* Buttons */
+
+#btnLogin{
+    width: 200px;
+}
+
+#btnGallery, #btnHome, #btnSend, #btnLogout {
+    height: 75px;
+}
+
+
+
+/* User Info */
+#userHandle{
+    margin-top: 10px;
+}
+
+#userFlag {
+    width: 100px;
+    height: 75px;
+    margin-right: 10px;
+    object-fit:scale-down;
+}
+
+#userAvatar {
+    width: 75px;
+    height: 75px;
+
+}
+
+
+/* Gallery Styling */
 .card{
     margin: .5em;
 }
 
 #galleryThumb{
     background-color: white;
+    filter: blur(15px);
+    -webkit-filter: blur(15px);
 }
 
+
+/* Drawing Modal Styling */
 #drawingTimer{
     color: black;
     padding-left: 4px;
@@ -15,48 +76,6 @@
 
 canvas {
     border: 2px black solid;
-}
-
-.flag-pfp {
-    display: flex;
-    align-items: center;
-}
-
-#userFlag {
-    width: 100px;
-    height: 50px;
-    margin-right: 10px;
-    object-fit:scale-down;
-}
-
-#userAvatar {
-    border: 1px black solid;
-    border-radius: .3rem;
-    width: 50px;
-    height: 50px;
-}
-
-#btnHome{
-    border: 1px solid black;
-    height: 75px;
-}
-
-#btnSend{
-    border: 1px solid black;
-    height: 75px;
-}
-
-.navbar  {
-    align-content: end;
-}
-
-.navbar-brand {
-    margin-left: 16px;
-}
-
-#galleryThumb{
-    filter: blur(15px);
-    -webkit-filter: blur(15px);
 }
 
 [id^="color_"]{
@@ -67,11 +86,15 @@ canvas {
 #colorPicker{
     margin-left: -30px;
 }
+
+
+/* Slider Styling */
 .slider-wrapper {
     display: block;
     width: 2px;
     height: 1px;
 }
+
 .slider-wrapper input {
     border: 1px black solid;
     width: 300px;
@@ -110,23 +133,3 @@ canvas {
     cursor: pointer;
 }
 
-/* LOGIN PAGE CSS */
-#github-button {
-    width: auto;
-}
-
-#github-button > a {
-    text-decoration: none;
-    color: #444;
-}
-
-/* Overriding the bootstrap style because we have a dark nav bar*/
-.btn-github {
-    color: #444;
-    background-color: #fff;
-}
-
-/* PixelTalk h1 element */
-.title {
-    margin: 3% 0;
-}

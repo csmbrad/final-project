@@ -5,13 +5,16 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/draw.js" defer></script>
+    <script src="js/drawpfp.js" defer></script>
     <script src="js/home.js" defer></script>
     <title>Pixel Talk</title>
 
@@ -19,6 +22,7 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark  bg-dark">
+
         <div class="container-fluid">
             <div>
                 <button type=" button" id="btnHome"
@@ -27,7 +31,7 @@
                 </button>
                 <a class="navbar-brand" href="#">
                     <img src=/images/flags/blank_flag.png id="userFlag">
-                    <img src=/images/placeholder_avatar.png id="userAvatar">
+                    <img src=/images/placeholder_avatar.png id="userAvatar" data-toggle="modal" data-target="#pfpModal">
                     <span id="userHandle" class="text-light"></span>
                 </a>
                 <a href="/logout"><span class="text-light">logout</span></a>
@@ -39,16 +43,30 @@
             </button>
       </div>
 
+        <div class="row">
+            <a type=" button" id="btnGallery" href="gallery.html"
+               class="btn btn-light btn-lg mr-2">
+                <img id="galleryIcon" src="/images/nav/envelope.svg">
+            </a>
+            <a type=" button" id="btnLogout" href="/logout"
+               class="btn btn-light btn-lg mr-2">Logout
+            </a>
+        </div>
         <!-- Modal -->
-        <div class="modal text-black" id="drawingModalCenter" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="container-fluid">
+        <div class="modal text-black" id="pfpModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered"
+                role="document">
 
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container">
+
+                        <div class="col-md-center">
                             <div class="row">
                                 <div class="col">
-                                    <canvas id="messageCanvas" height="300px" width="300px"></canvas>
+                                    <canvas id="profileCanvas" height="300px"
+                                            width="300px"></canvas>
                                 </div>
 
                                 <div class="col" id="colorPicker">
@@ -75,7 +93,9 @@
                                 </div>
                                 <div class="col">
                                     <div class="slider-wrapper">
-                                        <input type="range" min="1" max="100" value="50" class="slider" id="penSize">
+                                        <input type="range" min="1" max="100"
+                                                value="50" class="slider"
+                                                id="penSize">
                                     </div>
                                 </div>
                             </div>
@@ -86,18 +106,23 @@
                         <div class="col">
                             <h2 id="drawingTimer"></h2>
                         </div>
-                        <button type="button" class="btn btn-primary" data-container="body"
+                        <button type="button" class="btn btn-primary"
+                                data-container="body"
                                 data-toggle="popover" data-placement="right"
-                                data-content="Time starts after the first line is drawn.">?
+                                data-content="Time starts after the first line is drawn.">
+                            ?
                         </button>
-                        <button type="button" id="closeDrawingWindow" class="btn btn-danger" data-dismiss="modal">
+                        <button type="button" id="closeDrawingWindow"
+                                class="btn btn-danger" data-dismiss="modal">
                             Close
                         </button>
 
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
     </nav>
 </header>
 

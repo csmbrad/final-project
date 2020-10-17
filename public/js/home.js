@@ -1,6 +1,4 @@
-//const { request } = require("express")
-
-console.log("home.js")
+sessionStorage.clear()
 
 fetch("/mydata")
     .then(response => response.json())
@@ -11,11 +9,9 @@ fetch("/mydata")
         updateFriendsDisplay(json).then()
     })
 
-
 async function updateFriendsDisplay(myData) {
 
     // Will need to pull data for each friend
-    console.log(myData)
     let friends = myData.friends
     let container = document.getElementById("friendsDisplay")
     let rows = []
@@ -29,7 +25,6 @@ async function updateFriendsDisplay(myData) {
 
         // Get friend data by username
         let friendData = await getFriendData(friends[i])
-        console.log(friendData)
 
         let title = document.createElement("h5")
         title.classList.add("card-title")
@@ -56,6 +51,11 @@ async function updateFriendsDisplay(myData) {
         let container = document.createElement("div")
         container.classList.add("col-md-3")
         container.appendChild(card)
+        container.onclick = function () {
+            console.log("Clicked + " + friendData.username)
+            sessionStorage.setItem("friendData",friendData.username)
+            document.location.href = "/gallery.html";
+        }
 
         rows[rows.length - 1].appendChild(container) // add to the freshest row
 
