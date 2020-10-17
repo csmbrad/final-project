@@ -186,8 +186,10 @@ function timer() {
     } else {
 
         //upload drawing to server here
+      
         let dataURL= canvas.toDataURL('image/png')
         console.log(picture)
+
 
         fetch("/send", {
             method:"POST",
