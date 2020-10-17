@@ -23,25 +23,27 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark  bg-dark">
 
-        <div class="container-fluid">
-            <div>
-                <button type=" button" id="btnHome"
-                        class="btn btn-light btn-lg">
-                    <img src="/images/nav/home.svg" width="40px">
-                </button>
-                <a class="navbar-brand" href="#">
-                    <img src=/images/flags/blank_flag.png id="userFlag">
-                    <img src=/images/placeholder_avatar.png id="userAvatar" data-toggle="modal" data-target="#pfpModal">
-                    <span id="userHandle" class="text-light"></span>
-                </a>
-                <a href="/logout"><span class="text-light">logout</span></a>
-            </div>
-            <button type="button" id="btnSend"
-                    class="btn btn-light btn-lg my-2 my-sm-0"
-                    data-toggle="modal" data-target="#drawingModalCenter">
-                <img src="/images/nav/arrow.svg" width="40px">
-            </button>
-      </div>
+        <a type=" button" id="btnHome"
+           class="btn btn-light btn-lg">
+            <img id="homeIcon" src="/images/nav/home.svg">
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item active">
+                    <div class="col-sm align-self-start">
+                        <form class="form-group">
+                            <img src=/images/flags/blank_flag.png id="userFlag">
+                            <img src=/images/placeholder_avatar.png id="userAvatar"  data-toggle="modal" data-target="#pfpModal">
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <h1 id="userHandle" class="text-light"></h1>
+                </li>
+            </ul>
+        </div>
 
         <div class="row">
             <a type=" button" id="btnGallery" href="gallery.html"
