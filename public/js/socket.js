@@ -17,6 +17,9 @@ function initReceiverSocket(){
                         let sender = msg.sender;
                         if(sender) {
                             console.log("you have a new message from " + sender);
+
+                            // Set style of something to visible
+                            document.getElementById("mailStatus").style.display = "block"
                         }
                     }
 

@@ -7,6 +7,8 @@ fetch("/mydata")
     })
 updateGalleryDisplay().then()
 
+initReceiverSocket();
+
 async function updateGalleryDisplay() {
 
     let drawings = await getDrawings()
