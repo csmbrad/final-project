@@ -82,3 +82,40 @@ function getFriendData (friendUsername) {
             return json
         })
 }
+
+async function recreate(picture) {
+    const canvas = document.getElementById('loadImage')
+    const ctx = canvas.getContext('2d')
+    ctx.canvas.width = 300
+    ctx.canvas.height = 300
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    ctx.lineWidth = 10
+    ctx.imageSmoothingEnabled = true
+    let stroke
+    let lineCount = 0
+    let currLine = picture.strokes[lineCount]
+    let aPoint
+    let pointCount = 0
+
+    function draw() {
+      if (currLine !== undefined) {
+        ctx.lineCap = 'round'
+        aPoint = currLine.points[pointCount]
+        ctx.lineTo(aPoint.x, aPoint.y)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(aPoint.x, aPoint.y)
+        pointCount++
+        if (pointCount === currLine.points.length - 1) {
+          lineCount++
+          pointCount = 0
+          currLine = picture.strokes[lineCount]
+          ctx.strokeStyle = currLine.brushColor
+          ctx.lineWidth = currLine.brushSize
+          ctx.beginPath()
+        }
+        requestAnimationFrame(draw)
+      }
+    }
+    draw()
+}

@@ -15,6 +15,7 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/socket.js" defer></script>
+    <script src="js/drawpfp.js" defer></script>
     <script src="js/home.js" defer></script>
 
     <title>Pixel Talk</title>
@@ -36,7 +37,7 @@
                     <div class="col-sm align-self-start">
                         <form class="form-group">
                             <img src=/images/flags/blank_flag.png id="userFlag">
-                            <img src=/images/placeholder_avatar.png
+                            <img data-toggle="modal" data-target="#pfpModal" src=/images/placeholder_avatar.png
                                  id="userAvatar">
                         </form>
                     </div>
@@ -61,6 +62,77 @@
                class="btn btn-light btn-lg mr-2">Logout
             </a>
         </div>
+        <!-- Modal -->
+        <div class="modal text-black" id="pfpModal" tabindex="-1"
+        role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered"
+                role="document">
+
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="container">
+
+                        <div class="col-md-center">
+                            <div class="row">
+                                <div class="col">
+                                    <canvas id="profileCanvas" height="300px"
+                                            width="300px"></canvas>
+                                </div>
+
+                                <div class="col" id="colorPicker">
+                                    <div class="btn-group-vertical">
+                                        <button type="button" id="color_red"
+                                                style="background-color: red"></button>
+                                        <button type="button" id="color_orange"
+                                                style="background-color: orange"></button>
+                                        <button type="button" id="color_yellow"
+                                                style="background-color: yellow"></button>
+                                        <button type="button" id="color_green"
+                                                style="background-color: green"></button>
+                                        <button type="button" id="color_blue"
+                                                style="background-color: blue"></button>
+                                        <button type="button" id="color_purple"
+                                                style="background-color: purple"></button>
+                                        <button type="button" id="color_pink"
+                                                style="background-color: pink"></button>
+                                        <button type="button" id="color_white"
+                                                style="background-color: white"></button>
+                                        <button type="button" id="color_black"
+                                                style="background-color: black"></button>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="slider-wrapper">
+                                        <input type="range" min="1" max="100"
+                                                value="50" class="slider"
+                                                id="penSize">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col">
+                            <h2 id="drawingTimer"></h2>
+                        </div>
+                        <button type="button" class="btn btn-primary"
+                                data-container="body"
+                                data-toggle="popover" data-placement="right"
+                                data-content="Time starts after the first line is drawn.">
+                            ?
+                        </button>
+                        <button type="button" id="closeDrawingWindow"
+                                class="btn btn-danger" data-dismiss="modal">
+                            Close
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     </nav>
 </header>
 

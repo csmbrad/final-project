@@ -1,4 +1,4 @@
-const canvas = document.getElementById('messageCanvas')
+const canvas = document.getElementById('profileCanvas')
 const ctx = canvas.getContext('2d')
 ctx.canvas.width = 300
 ctx.canvas.height = 300
@@ -80,18 +80,7 @@ canvas.addEventListener('mouseout', (event => {
 }))
 
 canvas.addEventListener('click', (event => {
-    const title = document.querySelector('#drawingTitle')
-    let titleLength = title.value.length
-
-    if(titleLength < 3){
-        stop = true
-        alert("Title must be longer than 2 characters")
-        ctx.fillStyle = DEFAULTCOLOR
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-
-    }
-
-    else if (!timerStarted && titleLength >=3) {
+    if (!timerStarted) {
 
         //start timer
         drawingTimeout = setInterval(timer, 1000)
@@ -186,27 +175,24 @@ function timer() {
     } else {
 
         //upload drawing to server here
-      
         let dataURL= canvas.toDataURL('image/png')
         console.log(picture)
 
-
-        fetch("/send", {
+        fetch("/pfp", {
             method:"POST",
             body:JSON.stringify(
                 {
-                    title: document.getElementById("drawingTitle").value,
-                    time: Date.now(),
-                    artist: document.getElementById("userHandle").innerText,
-                    receiver: document.getElementById("myInput").value,
-                    URI: dataURL,
-                    instructions: picture
+                    avatar: dataURL
                 }
             ),
             headers: { "Content-Type": "application/json"}
-        }).then()
-        notifyReceiver(document.getElementById("myInput").value).then();
-        console.log("got here");
+        }).then(response => response.json())
+          .then(json => {
+            console.log("response from server : ", json)
+            document.getElementById('userAvatar').src = json.avatar
+        })
+
+
         //reset globals
         stop = true;
         picture = new drawing()

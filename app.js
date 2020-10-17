@@ -186,6 +186,23 @@ app.post('/send', bodyParser.json(),  (req, res) => {
     insertDrawing(req.body).then()
 })
 
+app.post('/pfp', bodyParser.json(),  (req, res) => {
+    //console.log(req)
+    if (req.user !== undefined && req.user !== null) { // if user has logged in
+        
+        req.user.then(user => {
+            let updatedUser = {
+                username: user.username,
+                avatar: req.body.avatar,      // Some placeholder image here (maybe github icon?)
+                flag: user.flag,   // Grab flag from IP???
+                friends: user.friends
+            }
+            console.log(updatedUser)
+            upsertUser(updatedUser)
+                .then(res.json(updatedUser))
+        })
+    }
+})
 
 // start listening on PORT
 app.listen(PORT, () => {
