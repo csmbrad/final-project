@@ -9,7 +9,6 @@ fetch("/mydata")
         updateFriendsDisplay(json).then()
     })
 
-
 async function updateFriendsDisplay(myData) {
 
     // Will need to pull data for each friend
