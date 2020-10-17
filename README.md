@@ -16,7 +16,6 @@ By having communication occur visually, it incentivizes users to actually draw o
 
 ### The Login Page
 To login click *sign in with GitHub*, and enter your credentials.
-![Login Page](public/images/login_pic.png)
 
 
 ### The Inbox Page
@@ -55,8 +54,12 @@ The UI features modals and cards primarily to present a user with easy to access
 ### Server
 Brad Cosma & Noah Olson
 
+Our server handles all interaction with the database, Github authentication, user sessions, and sockets to notify clients when they recieve a message. Additionally, our server looks at the IP of the user and pulls their country flag from it.
+
 ### Database
 Brad Cosma & Noah Olson
+
+Our database stores information for drawings and users. We have functions to add and update data, and queries to get user data by username and drawings by artist and receiver.
 
 ### Drawing Application
 Jake Pelrah & Patrick Houlihan
