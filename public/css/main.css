@@ -25,6 +25,14 @@
 
 }
 
+#mailStatus {
+    width: 170px;
+    height: 75px;
+    padding-top: 20px;
+    font-size: 16px;
+    display:none;
+}
+
 /* Buttons */
 
 #btnLogin{

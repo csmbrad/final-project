@@ -12,9 +12,9 @@
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
           crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
+    <script src="js/socket.js" defer></script>
     <script src="js/draw.js" defer></script>
     <script src="js/gallery.js" defer></script>
-    <script src="js/home.js" defer></script>
     <title>PixelTalk</title>
 
 </head>
@@ -46,6 +46,13 @@
             <a type=" button" id="btnDraw"
                class="btn btn-light btn-lg mr-2 mr-2" data-toggle="modal"
                data-target="#drawingModal">
+            </a>
+            <a href="/gallery.html" type=" button" id="mailStatus"
+               class="btn btn-light btn-lg mr-2">You have mail! Reload here
+            </a>
+
+            <a type=" button" id="btnGallery"
+                    class="btn btn-light btn-lg mr-2 mr-2" data-toggle="modal" data-target="#drawingModal">
                 <img id="pencilIcon" src="/images/nav/pencil.svg">
             </a>
             <a type=" button" id="btnLogout" href="/logout"
@@ -76,8 +83,6 @@
                                                class="form-control"
                                                placeholder="Title...">
                                     </div>
-
-
                                 </div>
 
                                 <div class="row">

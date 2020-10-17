@@ -1,4 +1,4 @@
-console.log("home.js")
+sessionStorage.clear()
 
 fetch("/mydata")
     .then(response => response.json())
@@ -9,6 +9,8 @@ fetch("/mydata")
         updateFriendsDisplay(json).then()
     })
 
+initReceiverSocket();
+console.log("ws is " + ws);
 
 async function updateFriendsDisplay(myData) {
 

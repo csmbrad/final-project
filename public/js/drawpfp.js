@@ -1,4 +1,4 @@
-const canvas = document.getElementById('messageCanvas')
+const canvas = document.getElementById('profileCanvas')
 const ctx = canvas.getContext('2d')
 ctx.canvas.width = 300
 ctx.canvas.height = 300
@@ -16,8 +16,11 @@ let inFrame = false
 
 //timer variables
 let timerStarted = false
-let drawingTimeLimit = 20
+let drawingTimeLimit = 2
 let drawingTimeout
+
+
+
 
 class point {
     constructor(x, y) {
@@ -77,18 +80,7 @@ canvas.addEventListener('mouseout', (event => {
 }))
 
 canvas.addEventListener('click', (event => {
-    const title = document.querySelector('#drawingTitle')
-    let titleLength = title.value.length
-
-    if(titleLength < 3){
-        stop = true
-        alert("Title must be longer than 2 characters")
-        ctx.fillStyle = DEFAULTCOLOR
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-
-    }
-
-    else if (!timerStarted && titleLength >=3) {
+    if (!timerStarted) {
 
         //start timer
         drawingTimeout = setInterval(timer, 1000)
@@ -175,7 +167,6 @@ document.querySelector('#closeDrawingWindow').addEventListener('click', () => {
 
 let timeRemaining = drawingTimeLimit
 
-
 function timer() {
     if (timeRemaining > 0) {
         timeRemaining--
@@ -183,26 +174,30 @@ function timer() {
         document.querySelector('#drawingTimer').innerHTML = `${timeRemaining}s`
     } else {
 
-        const artist = document.querySelector('#userHandle').innerHTML
-        const title = document.querySelector('#drawingTitle').value
-        const receiver = document.querySelector('#receiver').value
-
         //upload drawing to server here
-
         let dataURL= canvas.toDataURL('image/png')
         console.log(picture)
-        let data = {title:title, artist:artist, receiver:receiver, URI:dataURL, Instructions:picture}
-        uploadDrawing(data).then((res)=>{
-            console.log('Uploaded')
+
+        fetch("/pfp", {
+            method:"POST",
+            body:JSON.stringify(
+                {
+                    avatar: dataURL
+                }
+            ),
+            headers: { "Content-Type": "application/json"}
+        }).then(response => response.json())
+          .then(json => {
+            console.log("response from server : ", json)
+            document.getElementById('userAvatar').src = json.avatar
         })
 
+
         //reset globals
-        stop = true
+        stop = true;
         picture = new drawing()
         timerStarted = false
         timeRemaining = drawingTimeLimit
-        receiver.innerText = ''
-        title.innerText = ''
 
         //clear setTimeout
         clearTimeout(drawingTimeout)
@@ -217,21 +212,6 @@ function timer() {
 
         //trigger close button
         document.querySelector('#closeDrawingWindow').click()
+
     }
 }
-
-function uploadDrawing (drawing) {
-
-    return fetch("/uploadDrawing", {
-        method:"POST",
-        body:JSON.stringify(drawing),
-        headers: { "Content-Type": "application/json"}
-    })
-        .then(response => response.json())
-        .then(json => {
-            return json
-        })
-}
-
-
-
