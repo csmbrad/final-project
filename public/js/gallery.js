@@ -1,3 +1,6 @@
+
+
+
 fetch("/mydata")
     .then(response => response.json())
     .then(json => {
@@ -15,7 +18,45 @@ async function updateGalleryDisplay() {
     let drawings = await getDrawings()
     const gallery = document.querySelector('#gallery')
     let galleryItems = []
-    console.log(drawings)
+
+    async function recreate(picture) {
+        $('#displayModal').modal()
+        const canvas = document.querySelector('#displayCanvas')
+        const ctx = canvas.getContext('2d')
+        ctx.canvas.width = 300
+        ctx.canvas.height = 300
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        ctx.lineWidth = 10
+        ctx.imageSmoothingEnabled = true
+        let stroke
+        let lineCount = 0
+        let currLine = picture.strokes[lineCount]
+        let aPoint
+        let pointCount = 0
+
+        function draw() {
+            if (currLine !== undefined) {
+                ctx.lineCap = 'round'
+                aPoint = currLine.points[pointCount]
+                ctx.lineTo(aPoint.x, aPoint.y)
+                ctx.stroke()
+                ctx.beginPath()
+                ctx.moveTo(aPoint.x, aPoint.y)
+                pointCount++
+                if (pointCount === currLine.points.length - 1) {
+                    lineCount++
+                    pointCount = 0
+                    currLine = picture.strokes[lineCount]
+                    ctx.strokeStyle = currLine.brushColor
+                    ctx.lineWidth = currLine.brushSize
+                    ctx.beginPath()
+                }
+                requestAnimationFrame(draw)
+            }
+        }
+        draw()
+    }
+
 
     for (let i = 0; i < drawings.length; i++) {
 
@@ -36,8 +77,11 @@ async function updateGalleryDisplay() {
         cardArtist.classList.add('card-text')
         cardArtist.innerText = drawings[i].artist
 
-        let viewButton = document.createElement('a')
-        viewButton.setAttribute('href', drawings[i].URI)
+
+        let viewButton = document.createElement('button')
+        viewButton.setAttribute('id', `drawing_${i}`)
+        viewButton.onclick = () => recreate(drawings[i].instructions)
+
         viewButton.classList.add('btn-light')
         viewButton.classList.add('btn-sm')
         viewButton.innerText = 'View'
@@ -61,10 +105,12 @@ async function updateGalleryDisplay() {
         container.classList.add('col-md-3')
         container.appendChild(card)
         galleryItems.push(container)
+
     }
     galleryItems.forEach(drawing =>{
         gallery.appendChild(drawing)
     })
+
 }
 
 function getDrawings() {
@@ -82,3 +128,9 @@ function getDrawings() {
             return json
         })
 }
+
+
+
+
+
+
